@@ -1,6 +1,7 @@
 package main
 
 import (
+	"regexp"
 	"strings"
 
 	"github.com/cucumber/messages/go/v22"
@@ -111,7 +112,7 @@ func (r *renderer) renderSteps(ss []*messages.Step) {
 
 func (r *renderer) renderDocString(d *messages.DocString) {
 	r.writeLine(`"""` + d.MediaType)
-	r.writeLine(utf8.Left(d.Content, r.depth, INDENT))
+	r.WriteString(regexp.MustCompile("^|\n").ReplaceAllString(strings.TrimRight(d.Content, "\n"), "$0"+r.padding()) + "\n")
 	r.writeLine(`"""`)
 }
 
@@ -205,7 +206,7 @@ func (r renderer) writeHeadline(s, t string) {
 
 func (r renderer) writeLine(s string) {
 	if s != "" {
-		s = strings.Repeat(INDENT, r.depth) + s
+		s = r.padding() + s
 	}
 
 	_, err := r.WriteString(s + "\n")
@@ -213,4 +214,8 @@ func (r renderer) writeLine(s string) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func (r renderer) padding() string {
+	return strings.Repeat(INDENT, r.depth)
 }
