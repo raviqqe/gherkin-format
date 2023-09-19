@@ -59,7 +59,6 @@ func formatFiles(d string) error {
 
 				if err != nil {
 					es <- err
-					return
 				}
 			}()
 		}
