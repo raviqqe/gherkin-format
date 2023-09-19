@@ -105,8 +105,8 @@ func (r *renderer) renderRule(l *messages.Rule) {
 }
 
 func (r *renderer) renderSteps(ss []*messages.Step) {
-	for i, s := range ss {
-		r.renderStep(s, i == len(ss)-1)
+	for _, s := range ss {
+		r.renderStep(s)
 	}
 }
 
@@ -123,12 +123,15 @@ func (r *renderer) renderDocString(d *messages.DocString) {
 	r.writeLine(`"""`)
 }
 
-func (r *renderer) renderStep(s *messages.Step, last bool) {
+func (r *renderer) renderStep(s *messages.Step) {
 	r.writeLine(strings.TrimSpace(s.Keyword) + " " + s.Text)
 
 	if s.DocString != nil {
 		r.renderDocString(s.DocString)
 	}
+
+	r.depth++
+	defer func() { r.depth-- }()
 
 	if s.DataTable != nil {
 		r.renderDataTable(s.DataTable)
@@ -136,19 +139,17 @@ func (r *renderer) renderStep(s *messages.Step, last bool) {
 }
 
 func (r *renderer) renderExamples(es []*messages.Examples) {
-	r.writeHeadline("Examples", "")
+	for i, e := range es {
+		r.writeHeadline("Examples", e.Name)
 
-	r.depth++
-	defer func() { r.depth-- }()
-
-	for _, e := range es {
-		if e.Name != "" {
-			r.writeLine("")
-			r.writeHeadline(e.Name, "")
-		}
-
+		r.depth++
 		r.writeDescription(e.Description)
 		r.renderExampleTable(e.TableHeader, e.TableBody)
+		r.depth--
+
+		if i != len(es)-1 {
+			r.writeLine("")
+		}
 	}
 }
 
@@ -196,7 +197,6 @@ func (renderer) getCellWidths(rs []*messages.TableRow) []int {
 
 func (r renderer) writeDescription(s string) {
 	if s != "" {
-		r.writeLine("")
 		r.writeLine(strings.TrimSpace(s))
 	}
 }
