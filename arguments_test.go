@@ -8,6 +8,13 @@ import (
 )
 
 func TestGetArguments(t *testing.T) {
+	args, err := main.GetArguments([]string{})
+
+	assert.Nil(t, err)
+	assert.Equal(t, main.Arguments{Path: ""}, args)
+}
+
+func TestGetArgumentsPath(t *testing.T) {
 	args, err := main.GetArguments([]string{"path"})
 
 	assert.Nil(t, err)
