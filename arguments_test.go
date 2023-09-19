@@ -14,7 +14,7 @@ func TestGetArguments(t *testing.T) {
 	assert.Equal(t, main.Arguments{Paths: []string{"path"}}, args)
 }
 
-func TestGetArguments(t *testing.T) {
+func TestGetArgumentsMultiplePaths(t *testing.T) {
 	args, err := main.GetArguments([]string{"path1", "path2"})
 
 	assert.Nil(t, err)
