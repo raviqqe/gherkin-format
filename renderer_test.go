@@ -123,6 +123,45 @@ Feature: Foo
   @foo @bar
   Scenario: Bar
 		`,
+		`
+# foo
+Feature: Foo
+		`,
+		`
+# foo
+# bar
+Feature: Foo
+		`,
+		`
+Feature: Foo
+  # foo
+  Scenario: Bar
+		`,
+		`
+Feature: Foo
+  # foo
+  # bar
+  Scenario: Bar
+		`,
+		`
+Feature: Foo
+  Scenario: Bar
+    # foo
+    Given Baz
+		`,
+		`
+Feature: Foo
+  Scenario: Bar
+    Given Baz
+    # foo
+		`,
+		`
+Feature: Foo
+  Scenario: Bar
+    Given Baz
+    # foo
+    # bar
+		`,
 	} {
 		s := strings.TrimSpace(s)
 

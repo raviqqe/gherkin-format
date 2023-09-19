@@ -26,13 +26,12 @@ func (r *renderer) Render(d *messages.GherkinDocument) string {
 	slices.Reverse(r.comments)
 
 	r.renderFeature(d.Feature)
-	r.renderComments(d.Feature.Location)
 
 	return r.Builder.String()
 }
 
 func (r *renderer) renderFeature(f *messages.Feature) {
-	r.writeHeadline("Feature", f.Name)
+	r.writeHeadline("Feature", f.Name, f.Location)
 
 	r.depth++
 	defer func() { r.depth-- }()
@@ -59,7 +58,7 @@ func (r *renderer) renderFeature(f *messages.Feature) {
 }
 
 func (r *renderer) renderBackground(b *messages.Background) {
-	r.writeHeadline("Background", b.Name)
+	r.writeHeadline("Background", b.Name, b.Location)
 
 	r.depth++
 	defer func() { r.depth-- }()
@@ -85,7 +84,7 @@ func (r *renderer) renderScenario(s *messages.Scenario) {
 		t += " Outline"
 	}
 
-	r.writeHeadline(t, s.Name)
+	r.writeHeadline(t, s.Name, s.Location)
 
 	r.depth++
 	defer func() { r.depth-- }()
@@ -100,7 +99,7 @@ func (r *renderer) renderScenario(s *messages.Scenario) {
 }
 
 func (r *renderer) renderRule(l *messages.Rule) {
-	r.writeHeadline("Rule", l.Name)
+	r.writeHeadline("Rule", l.Name, l.Location)
 
 	r.depth++
 	defer func() { r.depth-- }()
@@ -142,6 +141,7 @@ func (r *renderer) renderDocString(d *messages.DocString) {
 }
 
 func (r *renderer) renderStep(s *messages.Step) {
+	r.renderComments(s.Location)
 	r.writeLine(strings.TrimSpace(s.Keyword) + " " + s.Text)
 
 	if s.DocString != nil {
@@ -149,7 +149,10 @@ func (r *renderer) renderStep(s *messages.Step) {
 	}
 
 	r.depth++
-	defer func() { r.depth-- }()
+	defer func() {
+		r.depth--
+		r.renderAfterComments(s.Location)
+	}()
 
 	if s.DataTable != nil {
 		r.renderDataTable(s.DataTable)
@@ -158,7 +161,7 @@ func (r *renderer) renderStep(s *messages.Step) {
 
 func (r *renderer) renderExamples(es []*messages.Examples) {
 	for i, e := range es {
-		r.writeHeadline("Examples", e.Name)
+		r.writeHeadline("Examples", e.Name, e.Location)
 
 		r.depth++
 		r.writeDescription(e.Description)
@@ -199,14 +202,22 @@ func (r renderer) renderCells(cs []*messages.TableCell, ws []int) {
 	r.writeLine(s)
 }
 
-func (r renderer) renderComments(l *messages.Location) {
-	s := "|"
-
-	for i, c := range cs {
-		s += " " + utf8.Right(c.Value, ws[i], " ") + " |"
+func (r *renderer) renderComments(l *messages.Location) {
+	for len(r.comments) > 0 && r.comments[len(r.comments)-1].Location.Line <= l.Line {
+		i := len(r.comments) - 1
+		r.writeLine(strings.TrimSpace(r.comments[i].Text))
+		r.comments = r.comments[:i]
 	}
+}
 
-	r.writeLine(s)
+func (r *renderer) renderAfterComments(l *messages.Location) {
+	for len(r.comments) > 0 && r.comments[len(r.comments)-1].Location.Line <= l.Line+1 {
+		i := len(r.comments) - 1
+		c := r.comments[i]
+		r.writeLine(strings.TrimSpace(c.Text))
+		r.comments = r.comments[:i]
+		l = c.Location
+	}
 }
 
 func (renderer) getCellWidths(rs []*messages.TableRow) []int {
@@ -230,7 +241,9 @@ func (r renderer) writeDescription(s string) {
 	}
 }
 
-func (r renderer) writeHeadline(s, t string) {
+func (r renderer) writeHeadline(s, t string, l *messages.Location) {
+	r.renderComments(l)
+
 	s += ":"
 
 	if t != "" {
