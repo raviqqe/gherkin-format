@@ -63,6 +63,16 @@ func (r *renderer) renderBackground(b *messages.Background) {
 }
 
 func (r *renderer) renderScenario(s *messages.Scenario) {
+	if len(s.Tags) > 0 {
+		ss := []string{}
+
+		for _, t := range s.Tags {
+			ss = append(ss, t.Name)
+		}
+
+		r.writeLine(strings.Join(ss, " "))
+	}
+
 	t := "Scenario"
 
 	if len(s.Examples) != 0 {
