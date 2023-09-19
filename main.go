@@ -23,5 +23,5 @@ func command(ss []string, w io.Writer) error {
 		return formatFiles(args.Directory)
 	}
 
-	return formatFile(args.File, w)
+	return formatFile(args.File)
 }
