@@ -12,12 +12,12 @@ Usage:
 Options:
 	-h, --help  Show this help.`
 
-type arguments struct {
+type Arguments struct {
 	Path string `docopt:"<path>"`
 }
 
-func GetArguments(ss []string) (arguments, error) {
-	args := arguments{}
+func GetArguments(ss []string) (Arguments, error) {
+	args := Arguments{}
 	err := parseArguments(usage, ss, &args)
 	return args, err
 }
