@@ -24,13 +24,5 @@ func Run(ss []string) error {
 		return Format(os.Stdin, os.Stdout)
 	}
 
-	s, err := os.Stat(args.Paths[0])
-
-	if err != nil {
-		return err
-	} else if s.IsDir() {
-		return FormatDirectory(args.Paths[0])
-	}
-
-	return FormatFile(args.Paths[0])
+	return FormatPaths(args.Paths)
 }

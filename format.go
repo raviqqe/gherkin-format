@@ -23,6 +23,45 @@ func Format(r io.Reader, w io.Writer) error {
 	return err
 }
 
+func FormatPaths(ps []string) error {
+	w := sync.WaitGroup{}
+	es := make(chan error, len(ps))
+
+	for _, p := range ps {
+		w.Add(1)
+
+		go func(p string) {
+			defer w.Done()
+
+			err := formatPath(p)
+
+			if err != nil {
+				es <- err
+			}
+		}(p)
+	}
+
+	w.Wait()
+
+	if len(es) != 0 {
+		return <-es
+	}
+
+	return nil
+}
+
+func formatPath(p string) error {
+	s, err := os.Stat(p)
+
+	if err != nil {
+		return err
+	} else if s.IsDir() {
+		return FormatDirectory(p)
+	}
+
+	return FormatFile(p)
+}
+
 func FormatFile(s string) error {
 	f, err := os.OpenFile(s, os.O_RDWR, 0644)
 
