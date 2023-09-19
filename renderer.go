@@ -34,7 +34,7 @@ func (r *renderer) Render(d *messages.GherkinDocument) string {
 }
 
 func (r *renderer) renderFeature(f *messages.Feature) {
-	r.writeHeadline("Feature", normalizeText(f.Name), f.Location)
+	r.writeHeadline("Feature", f.Name, f.Location)
 
 	r.depth++
 	defer func() { r.depth-- }()
@@ -254,7 +254,7 @@ func (r renderer) writeHeadline(s, t string, l *messages.Location) {
 	s += ":"
 
 	if t != "" {
-		s += " " + t
+		s += " " + normalizeText(t)
 	}
 
 	r.writeLine(s)
