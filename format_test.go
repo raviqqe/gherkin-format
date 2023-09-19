@@ -29,6 +29,6 @@ func TestFormatFileError(t *testing.T) {
 	assert.NotNil(t, formatFile(f.Name()))
 }
 
-func TestFormatFilesWithNonReadableSourceDir(t *testing.T) {
+func TestFormatFilesWithNonReadableDirectory(t *testing.T) {
 	assert.NotNil(t, formatFiles("foo"))
 }
