@@ -121,7 +121,7 @@ Feature: Highlander
 		`
 Feature: Foo
   @foo @bar
-  Scenario Outline: Bar
+  Scenario: Bar
 		`,
 	} {
 		s := strings.TrimSpace(s)
