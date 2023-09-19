@@ -175,6 +175,15 @@ Feature: Foo
   Scenario: Bar
     Given Baz
     """
+    foo
+    """
+    # foo
+		`,
+		`
+Feature: Foo
+  Scenario: Bar
+    Given Baz
+    """
     """
     # foo
 
