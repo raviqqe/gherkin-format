@@ -30,7 +30,7 @@ func (r *renderer) renderFeature(f *messages.Feature) {
 
 	r.writeDescription(f.Description)
 
-	for _, c := range f.Children {
+	for i, c := range f.Children {
 		if c.Background != nil {
 			r.renderBackground(c.Background)
 		}
@@ -41,6 +41,10 @@ func (r *renderer) renderFeature(f *messages.Feature) {
 
 		if c.Rule != nil {
 			r.renderRule(c.Rule)
+		}
+
+		if i != len(f.Children)-1 {
+			r.writeLine("")
 		}
 	}
 }
@@ -56,7 +60,13 @@ func (r *renderer) renderBackground(b *messages.Background) {
 }
 
 func (r *renderer) renderScenario(s *messages.Scenario) {
-	r.writeHeadline("Scenario", s.Name)
+	t := "Scenario"
+
+	if len(s.Examples) != 0 {
+		t += " Outline"
+	}
+
+	r.writeHeadline(t, s.Name)
 
 	r.depth++
 	defer func() { r.depth-- }()
