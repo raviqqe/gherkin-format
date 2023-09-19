@@ -11,8 +11,7 @@ func TestGetArguments(t *testing.T) {
 		parameters []string
 		arguments
 	}{
-		{[]string{"file"}, arguments{File: "file"}},
-		{[]string{"dir1", "dir2"}, arguments{SrcDir: "dir1", DestDir: "dir2"}},
+		{[]string{"path"}, arguments{Path: "path"}},
 	} {
 		assert.Equal(t, c.arguments, getArguments(c.parameters))
 	}
@@ -20,10 +19,10 @@ func TestGetArguments(t *testing.T) {
 
 func TestParseArgumentsPanic(t *testing.T) {
 	assert.Panics(t, func() {
-		parseArguments("", []string{"file"}, &arguments{})
+		parseArguments("", []string{"path"}, &arguments{})
 	})
 
 	assert.Panics(t, func() {
-		parseArguments(usage, []string{"file"}, arguments{})
+		parseArguments(usage, []string{"path"}, arguments{})
 	})
 }
