@@ -4,19 +4,18 @@ import (
 	"github.com/docopt/docopt-go"
 )
 
-var usage = `Gherkin to Markdown converter
+const usage = `Gherkin to Markdown converter
 
 Usage:
 	gherkin2markdown <file>
-	gherkin2markdown <srcdir> <destdir>
+	gherkin2markdown <directory>
 
 Options:
 	-h, --help  Show this help.`
 
 type arguments struct {
-	File    string `docopt:"<file>"`
-	SrcDir  string `docopt:"<srcdir>"`
-	DestDir string `docopt:"<destdir>"`
+	File      string `docopt:"<file>"`
+	Directory string `docopt:"<directory>"`
 }
 
 func getArguments(ss []string) arguments {
