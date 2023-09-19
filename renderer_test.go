@@ -1,15 +1,16 @@
-package main
+package main_test
 
 import (
 	"strings"
 	"testing"
 
 	"github.com/cucumber/gherkin/go/v27"
+	"github.com/raviqqe/gherkin-format"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestNewRenderer(t *testing.T) {
-	newRenderer()
+	main.NewRenderer()
 }
 
 func TestRendererRender(t *testing.T) {
@@ -216,7 +217,7 @@ Feature: Foo
 			d, err := gherkin.ParseGherkinDocument(strings.NewReader(s), func() string { return "" })
 
 			assert.Nil(t, err)
-			assert.Equal(t, strings.TrimSpace(s)+"\n", newRenderer().Render(d))
+			assert.Equal(t, strings.TrimSpace(s)+"\n", main.NewRenderer().Render(d))
 		})
 	}
 }
@@ -242,12 +243,12 @@ Feature: Foo
 	d, err := gherkin.ParseGherkinDocument(strings.NewReader(s), func() string { return "" })
 
 	assert.Nil(t, err)
-	assert.Equal(t, u+"\n", newRenderer().Render(d))
+	assert.Equal(t, u+"\n", main.NewRenderer().Render(d))
 }
 
 func TestRendererRenderTrimSpace(t *testing.T) {
 	d, err := gherkin.ParseGherkinDocument(strings.NewReader("Feature:  foo  bar\tbaz"), func() string { return "" })
 
 	assert.Nil(t, err)
-	assert.Equal(t, "Feature: foo bar baz\n", newRenderer().Render(d))
+	assert.Equal(t, "Feature: foo bar baz\n", main.NewRenderer().Render(d))
 }

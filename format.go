@@ -19,7 +19,7 @@ func Format(r io.Reader, w io.Writer) error {
 		return err
 	}
 
-	_, err = fmt.Fprint(w, newRenderer().Render(d))
+	_, err = fmt.Fprint(w, NewRenderer().Render(d))
 	return err
 }
 
@@ -48,7 +48,7 @@ func FormatFile(s string) error {
 		return err
 	}
 
-	_, err = fmt.Fprint(f, newRenderer().Render(d))
+	_, err = fmt.Fprint(f, NewRenderer().Render(d))
 	return err
 }
 

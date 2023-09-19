@@ -20,7 +20,7 @@ type renderer struct {
 	comments []*messages.Comment
 }
 
-func newRenderer() *renderer {
+func NewRenderer() *renderer {
 	return &renderer{&strings.Builder{}, 0, nil}
 }
 
