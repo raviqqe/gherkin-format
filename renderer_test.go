@@ -63,7 +63,7 @@ Feature: Foo
       | someone | something |
       | I       | cooking   |
       | You     | coding    |
-			`,
+		`,
 		`
 Feature: Foo
   Scenario Outline: Bar
@@ -73,7 +73,7 @@ Feature: Foo
       | someone | something |
       | I       | cooking   |
       | You     | coding    |
-			`,
+		`,
 		`
 Feature: Foo
   Scenario Outline: Bar
@@ -85,7 +85,7 @@ Feature: Foo
       | someone | something |
       | I       | cooking   |
       | You     | coding    |
-			`,
+		`,
 		`
 Feature: Foo
   Scenario Outline: Bar
@@ -100,7 +100,7 @@ Feature: Foo
       | something |
       | cooking   |
       | coding    |
-`,
+		`,
 	} {
 		s := strings.TrimSpace(s)
 
