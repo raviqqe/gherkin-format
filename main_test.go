@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
@@ -10,39 +9,34 @@ import (
 )
 
 func TestCommand(t *testing.T) {
-	f, err := ioutil.TempFile("", "")
+	f, err := os.CreateTemp("", "")
 	assert.Nil(t, err)
 
 	_, err = f.WriteString("Feature: Foo")
 	assert.Nil(t, err)
 
-	assert.Nil(t, command([]string{f.Name()}, ioutil.Discard))
+	assert.Nil(t, command([]string{f.Name()}))
 
 	os.Remove(f.Name())
 }
 
 func TestCommandWithNonExistentFile(t *testing.T) {
-	assert.NotNil(t, command([]string{"non-existent.feature"}, ioutil.Discard))
+	assert.NotNil(t, command([]string{"non-existent.feature"}))
 }
 
 func TestCommandWithDirectory(t *testing.T) {
-	r, err := ioutil.TempDir("", "")
+	d, err := os.MkdirTemp("", "")
 	assert.Nil(t, err)
 
-	s := filepath.Join(r, "src")
-	err = os.Mkdir(s, 0700)
+	f := filepath.Join(d, "foo.feature")
+	err = os.WriteFile(f, []byte("Feature:  Foo"), 0600)
 	assert.Nil(t, err)
 
-	err = ioutil.WriteFile(filepath.Join(s, "foo.feature"), []byte("Feature: Foo"), 0600)
-	assert.Nil(t, err)
+	assert.Nil(t, command([]string{d}))
 
-	d := filepath.Join(r, "dest")
-
-	assert.Nil(t, command([]string{s, d}, ioutil.Discard))
-
-	bs, err := ioutil.ReadFile(filepath.Join(d, "foo.md"))
+	bs, err := os.ReadFile(f)
 	assert.Nil(t, err)
 	assert.Equal(t, "# Foo\n", string(bs))
 
-	os.RemoveAll(r)
+	os.RemoveAll(d)
 }
