@@ -63,7 +63,7 @@ Feature: Foo
       | someone | something |
       | I       | cooking   |
       | You     | coding    |
-			`,
+		`,
 		`
 Feature: Foo
   Scenario Outline: Bar
@@ -73,7 +73,7 @@ Feature: Foo
       | someone | something |
       | I       | cooking   |
       | You     | coding    |
-			`,
+		`,
 		`
 Feature: Foo
   Scenario Outline: Bar
@@ -85,7 +85,7 @@ Feature: Foo
       | someone | something |
       | I       | cooking   |
       | You     | coding    |
-			`,
+		`,
 		`
 Feature: Foo
   Scenario Outline: Bar
@@ -100,7 +100,7 @@ Feature: Foo
       | something |
       | cooking   |
       | coding    |
-`,
+		`,
 	} {
 		s := strings.TrimSpace(s)
 
@@ -111,4 +111,28 @@ Feature: Foo
 			assert.Equal(t, strings.TrimSpace(s)+"\n", newRenderer().Render(d))
 		})
 	}
+}
+
+func TestRendererRenderCodeBlockMultipleTimes(t *testing.T) {
+	s := strings.TrimSpace(`
+Feature: Foo
+  Scenario: Bar
+    Given Baz
+     """foo
+    bar
+    """
+  `)
+	u := strings.TrimSpace(`
+Feature: Foo
+  Scenario: Bar
+    Given Baz
+    """foo
+    bar
+    """
+  `)
+
+	d, err := gherkin.ParseGherkinDocument(strings.NewReader(s), func() string { return "" })
+
+	assert.Nil(t, err)
+	assert.Equal(t, u+"\n", newRenderer().Render(d))
 }
