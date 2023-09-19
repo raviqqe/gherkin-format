@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	if err := command(os.Args[1:]); err != nil {
+	if err := Run(os.Args[1:]); err != nil {
 		if _, err := fmt.Fprintln(os.Stderr, err); err != nil {
 			panic(err)
 		}
@@ -15,7 +15,7 @@ func main() {
 	}
 }
 
-func command(ss []string) error {
+func Run(ss []string) error {
 	args, err := GetArguments(ss)
 
 	if err != nil {
