@@ -112,7 +112,14 @@ func (r *renderer) renderSteps(ss []*messages.Step) {
 
 func (r *renderer) renderDocString(d *messages.DocString) {
 	r.writeLine(`"""` + d.MediaType)
-	r.WriteString(regexp.MustCompile("^|\n").ReplaceAllString(strings.TrimRight(d.Content, "\n"), "$0"+r.padding()) + "\n")
+
+	if d.Content != "" {
+		r.WriteString(
+			regexp.MustCompile("(^|\n)([^\n])").
+				ReplaceAllString(d.Content, "$1"+r.padding()+"$2") + "\n",
+		)
+	}
+
 	r.writeLine(`"""`)
 }
 
