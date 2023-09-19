@@ -21,7 +21,7 @@ func Run(ss []string) error {
 	if err != nil {
 		return err
 	} else if args.Path == "" {
-		return format(os.Stdin, os.Stdout)
+		return Format(os.Stdin, os.Stdout)
 	}
 
 	s, err := os.Stat(args.Path)
@@ -29,8 +29,8 @@ func Run(ss []string) error {
 	if err != nil {
 		return err
 	} else if s.IsDir() {
-		return formatFiles(args.Path)
+		return FormatFiles(args.Path)
 	}
 
-	return formatFile(args.Path)
+	return FormatFile(args.Path)
 }

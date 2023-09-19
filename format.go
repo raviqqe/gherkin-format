@@ -12,7 +12,7 @@ import (
 
 const featureFileExtension = ".feature"
 
-func format(r io.Reader, w io.Writer) error {
+func Format(r io.Reader, w io.Writer) error {
 	d, err := gherkin.ParseGherkinDocument(r, func() string { return "" })
 
 	if err != nil {
@@ -23,7 +23,7 @@ func format(r io.Reader, w io.Writer) error {
 	return err
 }
 
-func formatFile(s string) error {
+func FormatFile(s string) error {
 	f, err := os.OpenFile(s, os.O_RDWR, 0644)
 
 	if err != nil {
@@ -52,7 +52,7 @@ func formatFile(s string) error {
 	return err
 }
 
-func formatFiles(d string) error {
+func FormatFiles(d string) error {
 	w := sync.WaitGroup{}
 	es := make(chan error)
 
@@ -67,7 +67,7 @@ func formatFiles(d string) error {
 			go func() {
 				defer w.Done()
 
-				err := formatFile(p)
+				err := FormatFile(p)
 
 				if err != nil {
 					es <- err
