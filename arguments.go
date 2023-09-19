@@ -23,7 +23,7 @@ func GetArguments(ss []string) (Arguments, error) {
 }
 
 func parseArguments(u string, ss []string, args interface{}) error {
-	opts, err := docopt.ParseArgs(u, ss, "0.1.0")
+	opts, err := docopt.ParseArgs(u, ss, "")
 
 	if err != nil {
 		return err

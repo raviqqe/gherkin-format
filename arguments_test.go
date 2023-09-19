@@ -8,15 +8,8 @@ import (
 )
 
 func TestGetArguments(t *testing.T) {
-	for _, c := range []struct {
-		parameters []string
-		arguments  main.Arguments
-	}{
-		{[]string{"path"}, main.Arguments{Path: "path"}},
-	} {
-		args, err := main.GetArguments(c.parameters)
+	args, err := main.GetArguments([]string{"path"})
 
-		assert.Nil(t, err)
-		assert.Equal(t, c.arguments, args)
-	}
+	assert.Nil(t, err)
+	assert.Equal(t, main.Arguments{Path: "path"}, args)
 }
