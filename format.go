@@ -24,8 +24,18 @@ func formatFile(s string) error {
 		return err
 	}
 
-	f.Truncate(0)
-	f.Seek(0, 0)
+	err = f.Truncate(0)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = f.Seek(0, 0)
+
+	if err != nil {
+		return err
+	}
+
 	_, err = fmt.Fprint(f, newRenderer().Render(d))
 	return err
 }
