@@ -18,7 +18,6 @@ func main() {
 
 func command(ss []string, w io.Writer) error {
 	args := getArguments(ss)
-
 	s, err := os.Stat(args.Path)
 
 	if err != nil {
