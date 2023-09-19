@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"sync"
@@ -10,6 +11,17 @@ import (
 )
 
 const featureFileExtension = ".feature"
+
+func format(r io.Reader, w io.Writer) error {
+	d, err := gherkin.ParseGherkinDocument(r, func() string { return "" })
+
+	if err != nil {
+		return err
+	}
+
+	_, err = fmt.Fprint(w, newRenderer().Render(d))
+	return err
+}
 
 func formatFile(s string) error {
 	f, err := os.OpenFile(s, os.O_RDWR, 0644)

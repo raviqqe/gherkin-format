@@ -1,11 +1,16 @@
 package main
 
 import (
+	"bytes"
 	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
+
+func TestFormat(t *testing.T) {
+	assert.Nil(t, format(bytes.NewBufferString("Feature: Foo"), bytes.NewBufferString("")))
+}
 
 func TestFormatFile(t *testing.T) {
 	f, err := os.CreateTemp("", "")
