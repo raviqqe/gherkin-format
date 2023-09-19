@@ -7,15 +7,13 @@ import (
 const usage = `Gherkin to Markdown converter
 
 Usage:
-	gherkin2markdown <file>
-	gherkin2markdown <directory>
+	gherkin2markdown <path>
 
 Options:
 	-h, --help  Show this help.`
 
 type arguments struct {
-	File      string `docopt:"<file>"`
-	Directory string `docopt:"<directory>"`
+	Path string `docopt:"<path>"`
 }
 
 func getArguments(ss []string) arguments {

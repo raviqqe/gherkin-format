@@ -19,9 +19,13 @@ func main() {
 func command(ss []string, w io.Writer) error {
 	args := getArguments(ss)
 
-	if args.File == "" {
-		return formatFiles(args.Directory)
+	s, err := os.Stat(args.Path)
+
+	if err != nil {
+		return err
+	} else if s.IsDir() {
+		return formatFiles(args.Path)
 	}
 
-	return formatFile(args.File)
+	return formatFile(args.Path)
 }
