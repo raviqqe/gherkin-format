@@ -20,8 +20,8 @@ func command(ss []string, w io.Writer) error {
 	args := getArguments(ss)
 
 	if args.File == "" {
-		return convertFiles(args.SrcDir, args.DestDir)
+		return formatFiles(args.Directory)
 	}
 
-	return convertFile(args.File, w)
+	return formatFile(args.File, w)
 }
