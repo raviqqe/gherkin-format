@@ -1,4 +1,4 @@
-package main
+package main_test
 
 import (
 	"testing"
@@ -13,15 +13,20 @@ func TestGetArguments(t *testing.T) {
 	}{
 		{[]string{"path"}, arguments{Path: "path"}},
 	} {
-		assert.Equal(t, c.arguments, getArguments(c.parameters))
+		args, err := getArguments(c.parameters)
+
+		assert.Nil(t, err)
+		assert.Equal(t, c.arguments, args)
 	}
 }
 
-func TestParseArgumentsPanic(t *testing.T) {
-	assert.Panics(t, func() {
-		parseArguments("", []string{"path"}, &arguments{})
-	})
+func TestParseArgumentsWithoutUsage(t *testing.T) {
+	err := parseArguments("", []string{"path"}, &arguments{})
 
+	assert.Error(t, err)
+}
+
+func TestParseArgumentsPanic(t *testing.T) {
 	assert.Panics(t, func() {
 		parseArguments(usage, []string{"path"}, arguments{})
 	})

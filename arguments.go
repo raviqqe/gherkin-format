@@ -16,7 +16,7 @@ type arguments struct {
 	Path string `docopt:"<path>"`
 }
 
-func getArguments(ss []string) (arguments, error) {
+func GetArguments(ss []string) (arguments, error) {
 	args := arguments{}
 	err := parseArguments(usage, ss, &args)
 	return args, err
