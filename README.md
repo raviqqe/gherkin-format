@@ -7,7 +7,7 @@
 
 Gherkin code formatter
 
-## Usage
+## Install
 
 ```sh
 go install github.com/raviqqe/gherkin-format@latest
