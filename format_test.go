@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestConvertFile(t *testing.T) {
+func TestFormatFile(t *testing.T) {
 	f, err := ioutil.TempFile("", "")
 	assert.Nil(t, err)
 	defer os.Remove(f.Name())
@@ -19,7 +19,7 @@ func TestConvertFile(t *testing.T) {
 	assert.Nil(t, formatFile(f.Name(), ioutil.Discard))
 }
 
-func TestConvertFileError(t *testing.T) {
+func TestFormatFileError(t *testing.T) {
 	f, err := ioutil.TempFile("", "")
 	assert.Nil(t, err)
 	defer os.Remove(f.Name())
@@ -30,7 +30,7 @@ func TestConvertFileError(t *testing.T) {
 	assert.NotNil(t, formatFile(f.Name(), ioutil.Discard))
 }
 
-func TestConvertFilesWithNonReadableSourceDir(t *testing.T) {
+func TestFormatFilesWithNonReadableSourceDir(t *testing.T) {
 	d, err := ioutil.TempDir("", "")
 	assert.Nil(t, err)
 	defer os.RemoveAll(d)
