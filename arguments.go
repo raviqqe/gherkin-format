@@ -4,7 +4,7 @@ import (
 	"github.com/docopt/docopt-go"
 )
 
-const usage = `Gherkin to Markdown converter
+const usage = `Gherkin code formatter
 
 Usage:
 	gherkin2markdown <path>
