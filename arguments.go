@@ -7,7 +7,7 @@ import (
 const usage = `Gherkin code formatter
 
 Usage:
-	gherkin2markdown [<path> ...]
+	gherkin-format [<path>...]
 
 Options:
 	-h, --help  Show this help.`
