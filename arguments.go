@@ -7,13 +7,13 @@ import (
 const usage = `Gherkin code formatter
 
 Usage:
-	gherkin2markdown [<path>]
+	gherkin2markdown [<path> ...]
 
 Options:
 	-h, --help  Show this help.`
 
 type Arguments struct {
-	Path string `docopt:"<path>"`
+	Paths []string `docopt:"<path>"`
 }
 
 func GetArguments(ss []string) (Arguments, error) {

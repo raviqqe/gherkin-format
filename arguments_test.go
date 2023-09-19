@@ -11,5 +11,12 @@ func TestGetArguments(t *testing.T) {
 	args, err := main.GetArguments([]string{"path"})
 
 	assert.Nil(t, err)
-	assert.Equal(t, main.Arguments{Path: "path"}, args)
+	assert.Equal(t, main.Arguments{Paths: []string{"path"}}, args)
+}
+
+func TestGetArguments(t *testing.T) {
+	args, err := main.GetArguments([]string{"path1", "path2"})
+
+	assert.Nil(t, err)
+	assert.Equal(t, main.Arguments{Paths: []string{"path1", "path2"}}, args)
 }

@@ -20,17 +20,17 @@ func Run(ss []string) error {
 
 	if err != nil {
 		return err
-	} else if args.Path == "" {
+	} else if len(args.Paths) == 0 {
 		return Format(os.Stdin, os.Stdout)
 	}
 
-	s, err := os.Stat(args.Path)
+	s, err := os.Stat(args.Paths[0])
 
 	if err != nil {
 		return err
 	} else if s.IsDir() {
-		return FormatFiles(args.Path)
+		return FormatFiles(args.Paths[0])
 	}
 
-	return FormatFile(args.Path)
+	return FormatFile(args.Paths[0])
 }
