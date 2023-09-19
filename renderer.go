@@ -198,6 +198,7 @@ func (renderer) getCellWidths(rs []*messages.TableRow) []int {
 func (r renderer) writeDescription(s string) {
 	if s != "" {
 		r.writeLine(strings.TrimSpace(s))
+		r.writeLine("")
 	}
 }
 

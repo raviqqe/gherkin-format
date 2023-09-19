@@ -33,11 +33,15 @@ Feature: Foo
 		`
 Feature: Foo
   bar
+
+  Scenario: Bar
 		`,
 		`
 Feature: Foo
   Scenario: Bar
     baz
+
+    Given blah
 		`,
 		`
 Feature: Foo
@@ -77,6 +81,7 @@ Feature: Foo
 
     Examples: Baz
       foo bar baz.
+
       | someone | something |
       | I       | cooking   |
       | You     | coding    |
@@ -99,7 +104,7 @@ Feature: Foo
 	} {
 		s := strings.TrimSpace(s)
 
-		t.Run(strings.ReplaceAll(s[:10], "\n", " "), func(t *testing.T) {
+		t.Run(strings.ReplaceAll(s, "\n", " "), func(t *testing.T) {
 			d, err := gherkin.ParseGherkinDocument(strings.NewReader(s), func() string { return "" })
 
 			assert.Nil(t, err)
