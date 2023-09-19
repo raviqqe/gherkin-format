@@ -244,3 +244,10 @@ Feature: Foo
 	assert.Nil(t, err)
 	assert.Equal(t, u+"\n", newRenderer().Render(d))
 }
+
+func TestRendererRenderTrimSpace(t *testing.T) {
+	d, err := gherkin.ParseGherkinDocument(strings.NewReader("Feature:  foo  bar\tbaz"), func() string { return "" })
+
+	assert.Nil(t, err)
+	assert.Equal(t, "Feature: foo bar baz\n", newRenderer().Render(d))
+}
