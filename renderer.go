@@ -48,13 +48,7 @@ func (r *renderer) renderFeature(f *messages.Feature) {
 }
 
 func (r *renderer) renderBackground(b *messages.Background) {
-	s := "Background"
-
-	if b.Name != "" {
-		s += " (" + b.Name + ")"
-	}
-
-	r.writeHeadline(s)
+	r.writeHeadline("Background", b.Name)
 
 	r.depth++
 	defer func() { r.depth-- }()
@@ -64,7 +58,7 @@ func (r *renderer) renderBackground(b *messages.Background) {
 }
 
 func (r *renderer) renderScenario(s *messages.Scenario) {
-	r.writeHeadline(s.Name)
+	r.writeHeadline("Scenario", s.Name)
 
 	r.depth++
 	defer func() { r.depth-- }()
@@ -79,7 +73,7 @@ func (r *renderer) renderScenario(s *messages.Scenario) {
 }
 
 func (r *renderer) renderRule(l *messages.Rule) {
-	r.writeHeadline(l.Name)
+	r.writeHeadline("Rule", l.Name)
 
 	r.depth++
 	defer func() { r.depth-- }()
@@ -131,7 +125,7 @@ func (r *renderer) renderStep(s *messages.Step, last bool) {
 }
 
 func (r *renderer) renderExamples(es []*messages.Examples) {
-	r.writeHeadline("Examples")
+	r.writeHeadline("Examples", "")
 
 	r.depth++
 	defer func() { r.depth-- }()
@@ -139,7 +133,7 @@ func (r *renderer) renderExamples(es []*messages.Examples) {
 	for _, e := range es {
 		if e.Name != "" {
 			r.writeLine("")
-			r.writeHeadline(e.Name)
+			r.writeHeadline(e.Name, "")
 		}
 
 		r.writeDescription(e.Description)
@@ -206,8 +200,14 @@ func (r renderer) writeDescription(s string) {
 	}
 }
 
-func (r renderer) writeHeadline(n, s string) {
-	r.writeLine(n + ": " + s)
+func (r renderer) writeHeadline(s, t string) {
+	s += ":"
+
+	if t != "" {
+		s += " " + t
+	}
+
+	r.writeLine(s)
 }
 
 func (r renderer) writeLine(s string) {
