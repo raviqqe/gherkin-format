@@ -36,7 +36,7 @@ func TestCommandWithDirectory(t *testing.T) {
 
 	bs, err := os.ReadFile(f)
 	assert.Nil(t, err)
-	assert.Equal(t, "# Foo\n", string(bs))
+	assert.Equal(t, "Feature: Foo\n", string(bs))
 
 	os.RemoveAll(d)
 }

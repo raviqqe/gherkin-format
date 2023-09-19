@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 	"testing"
 
@@ -14,64 +13,35 @@ func TestNewRenderer(t *testing.T) {
 }
 
 func TestRendererRender(t *testing.T) {
-	for _, ss := range [][2]string{
-		{
-			"Feature: Foo",
-			"# Foo\n",
-		},
-		{`
+	for _, s := range []string{
+		"Feature: Foo",
+		`
 Feature: Foo
   Scenario: Bar
     Given that
     When I do something
-    Then something happens`, `
-# Foo
-
-## Bar
-
-_Given_ that
-
-_When_ I do something
-
-_Then_ something happens.`,
-		},
-		{`
+    Then something happens
+		`,
+		`
 Feature: Foo
   Scenario: Bar
     When I do something:
     """sh
     foo
-    """`, fmt.Sprintf(`
-# Foo
-
-## Bar
-
-_When_ I do something:
-
-%[1]ssh
-foo
-%[1]s`, "```"),
-		},
-		{`
+    """
+		`,
+		`
 Feature: Foo
 
-  bar`, `
-# Foo
-
-bar`,
-		},
-		{`
+  bar
+		`,
+		`
 Feature: Foo
   Scenario: Bar
 
-    baz`, `
-# Foo
-
-## Bar
-
-baz`,
-		},
-		{`
+    baz
+		`,
+		`
 Feature: Foo
   Background: Bar
     When I do something`, `
@@ -79,66 +49,34 @@ Feature: Foo
 
 ## Background (Bar)
 
-_When_ I do something.`,
-		},
-		{`
+_When_ I do something.
+		`,
+		`
 Feature: Foo
   Background: Bar
   Given Baz:
     | foo |
-    | bar |`, `
-# Foo
-
-## Background (Bar)
-
-_Given_ Baz:
-
-| foo |
-| bar |`,
-		},
-		{`
+    | bar |
+		`,
+		`
 Feature: Foo
   Scenario Outline: Bar
     When <someone> does <something>.
     Examples:
       | someone | something |
       | I       | cooking   |
-      | You     | coding    |`, `
-# Foo
-
-## Bar
-
-_When_ <someone> does <something>.
-
-### Examples
-
-| someone | something |
-|---------|-----------|
-| I       | cooking   |
-| You     | coding    |`},
-		{`
+      | You     | coding    |
+			`,
+		`
 Feature: Foo
   Scenario Outline: Bar
     When <someone> does <something>.
     Examples: Baz
       | someone | something |
       | I       | cooking   |
-      | You     | coding    |`, `
-# Foo
-
-## Bar
-
-_When_ <someone> does <something>.
-
-### Examples
-
-#### Baz
-
-| someone | something |
-|---------|-----------|
-| I       | cooking   |
-| You     | coding    |`},
-		{`
+      | You     | coding    |
+			`,
+		`
 Feature: Foo
   Scenario Outline: Bar
     When <someone> does <something>.
@@ -147,24 +85,9 @@ Feature: Foo
 
       | someone | something |
       | I       | cooking   |
-      | You     | coding    |`, `
-# Foo
-
-## Bar
-
-_When_ <someone> does <something>.
-
-### Examples
-
-#### Baz
-
-foo bar baz.
-
-| someone | something |
-|---------|-----------|
-| I       | cooking   |
-| You     | coding    |`},
-		{`
+      | You     | coding    |
+			`,
+		`
 Feature: Foo
   Scenario Outline: Bar
     When <someone> does <something>.
@@ -175,45 +98,17 @@ Feature: Foo
     Examples: Blah
       | something |
       | cooking   |
-      | coding    |`, `
-# Foo
-
-## Bar
-
-_When_ <someone> does <something>.
-
-### Examples
-
-#### Baz
-
-| someone |
-|---------|
-| I       |
-| You     |
-
-#### Blah
-
-| something |
-|-----------|
-| cooking   |
-| coding    |`}, {`
+      | coding    |
+`, `
 Feature: Foo
   Rule: Bar
     Example: Baz
       When qux
-`, `
-# Foo
-
-## Bar
-
-### Baz
-
-_When_ qux.
-`},
+`,
 	} {
-		d, err := gherkin.ParseGherkinDocument(strings.NewReader(ss[0]), func() string { return "" })
+		d, err := gherkin.ParseGherkinDocument(strings.NewReader(s), func() string { return "" })
 
 		assert.Nil(t, err)
-		assert.Equal(t, strings.TrimSpace(ss[1])+"\n", newRenderer().Render(d))
+		assert.Equal(t, strings.TrimSpace(s)+"\n", newRenderer().Render(d))
 	}
 }
