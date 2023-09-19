@@ -1,10 +1,11 @@
-package main
+package main_test
 
 import (
 	"os"
 	"path/filepath"
 	"testing"
 
+	"github.com/raviqqe/gherkin-format"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -15,13 +16,13 @@ func TestCommand(t *testing.T) {
 	_, err = f.WriteString("Feature: Foo")
 	assert.Nil(t, err)
 
-	assert.Nil(t, command([]string{f.Name()}))
+	assert.Nil(t, main.Run([]string{f.Name()}))
 
 	os.Remove(f.Name())
 }
 
 func TestCommandWithNonExistentFile(t *testing.T) {
-	assert.NotNil(t, command([]string{"non-existent.feature"}))
+	assert.NotNil(t, main.Run([]string{"non-existent.feature"}))
 }
 
 func TestCommandWithDirectory(t *testing.T) {
@@ -32,7 +33,7 @@ func TestCommandWithDirectory(t *testing.T) {
 	err = os.WriteFile(f, []byte("Feature:  Foo"), 0600)
 	assert.Nil(t, err)
 
-	assert.Nil(t, command([]string{d}))
+	assert.Nil(t, main.Run([]string{d}))
 
 	bs, err := os.ReadFile(f)
 	assert.Nil(t, err)

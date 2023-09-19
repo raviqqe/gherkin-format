@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	if err := command(os.Args[1:]); err != nil {
+	if err := Run(os.Args[1:]); err != nil {
 		if _, err := fmt.Fprintln(os.Stderr, err); err != nil {
 			panic(err)
 		}
@@ -15,11 +15,13 @@ func main() {
 	}
 }
 
-func command(ss []string) error {
-	args := getArguments(ss)
+func Run(ss []string) error {
+	args, err := GetArguments(ss)
 
-	if args.Path == "" {
-		return format(os.Stdin, os.Stdout)
+	if err != nil {
+		return err
+	} else if args.Path == "" {
+		return Format(os.Stdin, os.Stdout)
 	}
 
 	s, err := os.Stat(args.Path)
@@ -27,8 +29,8 @@ func command(ss []string) error {
 	if err != nil {
 		return err
 	} else if s.IsDir() {
-		return formatFiles(args.Path)
+		return FormatFiles(args.Path)
 	}
 
-	return formatFile(args.Path)
+	return FormatFile(args.Path)
 }

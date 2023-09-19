@@ -1,15 +1,16 @@
-package main
+package main_test
 
 import (
 	"bytes"
 	"os"
 	"testing"
 
+	"github.com/raviqqe/gherkin-format"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestFormat(t *testing.T) {
-	assert.Nil(t, format(bytes.NewBufferString("Feature: Foo"), bytes.NewBufferString("")))
+	assert.Nil(t, main.Format(bytes.NewBufferString("Feature: Foo"), bytes.NewBufferString("")))
 }
 
 func TestFormatFile(t *testing.T) {
@@ -20,7 +21,7 @@ func TestFormatFile(t *testing.T) {
 	_, err = f.Write([]byte("Feature: Foo"))
 	assert.Nil(t, err)
 
-	assert.Nil(t, formatFile(f.Name()))
+	assert.Nil(t, main.FormatFile(f.Name()))
 }
 
 func TestFormatFileError(t *testing.T) {
@@ -31,9 +32,9 @@ func TestFormatFileError(t *testing.T) {
 	_, err = f.Write([]byte("Feature"))
 	assert.Nil(t, err)
 
-	assert.NotNil(t, formatFile(f.Name()))
+	assert.NotNil(t, main.FormatFile(f.Name()))
 }
 
 func TestFormatFilesWithNonReadableDirectory(t *testing.T) {
-	assert.NotNil(t, formatFiles("foo"))
+	assert.NotNil(t, main.FormatFiles("foo"))
 }
