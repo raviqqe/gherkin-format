@@ -31,8 +31,6 @@ func (r *renderer) renderFeature(f *messages.Feature) {
 	r.writeDescription(f.Description)
 
 	for _, c := range f.Children {
-		r.writeLine("")
-
 		if c.Background != nil {
 			r.renderBackground(c.Background)
 		}
@@ -95,31 +93,24 @@ func (r *renderer) renderRule(l *messages.Rule) {
 
 func (r *renderer) renderSteps(ss []*messages.Step) {
 	for i, s := range ss {
-		r.writeLine("")
 		r.renderStep(s, i == len(ss)-1)
 	}
 }
 
 func (r *renderer) renderDocString(d *messages.DocString) {
-	r.writeLine("```" + d.MediaType)
+	r.writeLine(`"""` + d.MediaType)
 	r.writeLine(d.Content)
-	r.writeLine("```")
+	r.writeLine(`"""`)
 }
 
 func (r *renderer) renderStep(s *messages.Step, last bool) {
-	if last && s.DocString == nil && s.DataTable == nil && s.Text[len(s.Text)-1] != '.' {
-		s.Text += "."
-	}
-
-	r.writeLine("_" + strings.TrimSpace(s.Keyword) + "_ " + s.Text)
+	r.writeLine(strings.TrimSpace(s.Keyword) + " " + s.Text)
 
 	if s.DocString != nil {
-		r.writeLine("")
 		r.renderDocString(s.DocString)
 	}
 
 	if s.DataTable != nil {
-		r.writeLine("")
 		r.renderDataTable(s.DataTable)
 	}
 }
@@ -137,8 +128,6 @@ func (r *renderer) renderExamples(es []*messages.Examples) {
 		}
 
 		r.writeDescription(e.Description)
-
-		r.writeLine("")
 		r.renderExampleTable(e.TableHeader, e.TableBody)
 	}
 }
@@ -149,10 +138,6 @@ func (r renderer) renderExampleTable(h *messages.TableRow, rs []*messages.TableR
 	r.renderCells(h.Cells, ws)
 
 	s := "|"
-
-	for _, w := range ws {
-		s += strings.Repeat("-", w+2) + "|"
-	}
 
 	r.writeLine(s)
 
@@ -211,7 +196,7 @@ func (r renderer) writeHeadline(s, t string) {
 }
 
 func (r renderer) writeLine(s string) {
-	_, err := r.WriteString(strings.Repeat("  ", r.depth+1) + s + "\n")
+	_, err := r.WriteString(strings.Repeat("  ", r.depth) + s + "\n")
 
 	if err != nil {
 		panic(err)
