@@ -7,6 +7,8 @@ import (
 	"github.com/willf/pad/utf8"
 )
 
+const INDENT = "  "
+
 type renderer struct {
 	*strings.Builder
 	depth int
@@ -109,7 +111,7 @@ func (r *renderer) renderSteps(ss []*messages.Step) {
 
 func (r *renderer) renderDocString(d *messages.DocString) {
 	r.writeLine(`"""` + d.MediaType)
-	r.writeLine(d.Content)
+	r.writeLine(utf8.Left(d.Content, r.depth, INDENT))
 	r.writeLine(`"""`)
 }
 
@@ -203,7 +205,7 @@ func (r renderer) writeHeadline(s, t string) {
 
 func (r renderer) writeLine(s string) {
 	if s != "" {
-		s = strings.Repeat("  ", r.depth) + s
+		s = strings.Repeat(INDENT, r.depth) + s
 	}
 
 	_, err := r.WriteString(s + "\n")
