@@ -52,7 +52,7 @@ func FormatFile(s string) error {
 	return err
 }
 
-func FormatFiles(d string) error {
+func FormatDirectory(d string) error {
 	w := sync.WaitGroup{}
 	es := make(chan error)
 

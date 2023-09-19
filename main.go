@@ -29,7 +29,7 @@ func Run(ss []string) error {
 	if err != nil {
 		return err
 	} else if s.IsDir() {
-		return FormatFiles(args.Paths[0])
+		return FormatDirectory(args.Paths[0])
 	}
 
 	return FormatFile(args.Paths[0])
