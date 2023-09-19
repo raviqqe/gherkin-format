@@ -11,6 +11,9 @@ import (
 
 const INDENT = "  "
 
+var docStringLineRegexp = regexp.MustCompile("(^|\n)([^\n])")
+var spaceRegexp = regexp.MustCompile(`\s+`)
+
 type renderer struct {
 	*strings.Builder
 	depth    int
@@ -31,7 +34,7 @@ func (r *renderer) Render(d *messages.GherkinDocument) string {
 }
 
 func (r *renderer) renderFeature(f *messages.Feature) {
-	r.writeHeadline("Feature", f.Name, f.Location)
+	r.writeHeadline("Feature", normalizeText(f.Name), f.Location)
 
 	r.depth++
 	defer func() { r.depth-- }()
@@ -132,7 +135,7 @@ func (r *renderer) renderDocString(d *messages.DocString) {
 
 	if d.Content != "" {
 		r.WriteString(
-			regexp.MustCompile("(^|\n)([^\n])").
+			docStringLineRegexp.
 				ReplaceAllString(d.Content, "$1"+r.padding()+"$2") + "\n",
 		)
 	}
@@ -286,4 +289,8 @@ func stepLastLocation(s *messages.Step) *messages.Location {
 	}
 
 	return l
+}
+
+func normalizeText(s string) string {
+	return spaceRegexp.ReplaceAllString(strings.TrimSpace(s), " ")
 }
