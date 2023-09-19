@@ -274,7 +274,7 @@ func stepLastLocation(s *messages.Step) *messages.Location {
 
 	if s.DocString != nil {
 		ll := *s.DocString.Location
-		ll.Line += int64(strings.Count(s.DocString.Content, "\n")) + 1
+		ll.Line += int64(strings.Count(s.DocString.Content, "\n")) + 2
 		l = &ll
 	}
 
