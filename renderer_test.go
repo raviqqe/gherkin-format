@@ -120,7 +120,7 @@ Feature: Highlander
 		`,
 		`
 Feature: Foo
-	@foo @bar
+  @foo @bar
   Scenario Outline: Bar
 		`,
 	} {
