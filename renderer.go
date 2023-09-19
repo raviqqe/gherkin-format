@@ -147,10 +147,6 @@ func (r renderer) renderExampleTable(h *messages.TableRow, rs []*messages.TableR
 
 	r.renderCells(h.Cells, ws)
 
-	s := "|"
-
-	r.writeLine(s)
-
 	for _, t := range rs {
 		r.renderCells(t.Cells, ws)
 	}
@@ -206,7 +202,11 @@ func (r renderer) writeHeadline(s, t string) {
 }
 
 func (r renderer) writeLine(s string) {
-	_, err := r.WriteString(strings.Repeat("  ", r.depth) + s + "\n")
+	if s != "" {
+		s = strings.Repeat("  ", r.depth) + s
+	}
+
+	_, err := r.WriteString(s + "\n")
 
 	if err != nil {
 		panic(err)
