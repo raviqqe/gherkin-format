@@ -1,11 +1,14 @@
 package main
 
 import (
+	"regexp"
 	"strings"
 
 	"github.com/cucumber/messages/go/v22"
 	"github.com/willf/pad/utf8"
 )
+
+const INDENT = "  "
 
 type renderer struct {
 	*strings.Builder
@@ -23,16 +26,14 @@ func (r *renderer) Render(d *messages.GherkinDocument) string {
 }
 
 func (r *renderer) renderFeature(f *messages.Feature) {
-	r.writeHeadline(f.Name)
+	r.writeHeadline("Feature", f.Name)
 
 	r.depth++
 	defer func() { r.depth-- }()
 
 	r.writeDescription(f.Description)
 
-	for _, c := range f.Children {
-		r.writeLine("")
-
+	for i, c := range f.Children {
 		if c.Background != nil {
 			r.renderBackground(c.Background)
 		}
@@ -44,17 +45,15 @@ func (r *renderer) renderFeature(f *messages.Feature) {
 		if c.Rule != nil {
 			r.renderRule(c.Rule)
 		}
+
+		if i != len(f.Children)-1 {
+			r.writeLine("")
+		}
 	}
 }
 
 func (r *renderer) renderBackground(b *messages.Background) {
-	s := "Background"
-
-	if b.Name != "" {
-		s += " (" + b.Name + ")"
-	}
-
-	r.writeHeadline(s)
+	r.writeHeadline("Background", b.Name)
 
 	r.depth++
 	defer func() { r.depth-- }()
@@ -64,7 +63,13 @@ func (r *renderer) renderBackground(b *messages.Background) {
 }
 
 func (r *renderer) renderScenario(s *messages.Scenario) {
-	r.writeHeadline(s.Name)
+	t := "Scenario"
+
+	if len(s.Examples) != 0 {
+		t += " Outline"
+	}
+
+	r.writeHeadline(t, s.Name)
 
 	r.depth++
 	defer func() { r.depth-- }()
@@ -79,7 +84,7 @@ func (r *renderer) renderScenario(s *messages.Scenario) {
 }
 
 func (r *renderer) renderRule(l *messages.Rule) {
-	r.writeHeadline(l.Name)
+	r.writeHeadline("Rule", l.Name)
 
 	r.depth++
 	defer func() { r.depth-- }()
@@ -100,52 +105,51 @@ func (r *renderer) renderRule(l *messages.Rule) {
 }
 
 func (r *renderer) renderSteps(ss []*messages.Step) {
-	for i, s := range ss {
-		r.writeLine("")
-		r.renderStep(s, i == len(ss)-1)
+	for _, s := range ss {
+		r.renderStep(s)
 	}
 }
 
 func (r *renderer) renderDocString(d *messages.DocString) {
-	r.writeLine("```" + d.MediaType)
-	r.writeLine(d.Content)
-	r.writeLine("```")
-}
+	r.writeLine(`"""` + d.MediaType)
 
-func (r *renderer) renderStep(s *messages.Step, last bool) {
-	if last && s.DocString == nil && s.DataTable == nil && s.Text[len(s.Text)-1] != '.' {
-		s.Text += "."
+	if d.Content != "" {
+		r.WriteString(
+			regexp.MustCompile("(^|\n)([^\n])").
+				ReplaceAllString(d.Content, "$1"+r.padding()+"$2") + "\n",
+		)
 	}
 
-	r.writeLine("_" + strings.TrimSpace(s.Keyword) + "_ " + s.Text)
+	r.writeLine(`"""`)
+}
+
+func (r *renderer) renderStep(s *messages.Step) {
+	r.writeLine(strings.TrimSpace(s.Keyword) + " " + s.Text)
 
 	if s.DocString != nil {
-		r.writeLine("")
 		r.renderDocString(s.DocString)
 	}
 
+	r.depth++
+	defer func() { r.depth-- }()
+
 	if s.DataTable != nil {
-		r.writeLine("")
 		r.renderDataTable(s.DataTable)
 	}
 }
 
 func (r *renderer) renderExamples(es []*messages.Examples) {
-	r.writeHeadline("Examples")
+	for i, e := range es {
+		r.writeHeadline("Examples", e.Name)
 
-	r.depth++
-	defer func() { r.depth-- }()
-
-	for _, e := range es {
-		if e.Name != "" {
-			r.writeLine("")
-			r.writeHeadline(e.Name)
-		}
-
+		r.depth++
 		r.writeDescription(e.Description)
-
-		r.writeLine("")
 		r.renderExampleTable(e.TableHeader, e.TableBody)
+		r.depth--
+
+		if i != len(es)-1 {
+			r.writeLine("")
+		}
 	}
 }
 
@@ -153,14 +157,6 @@ func (r renderer) renderExampleTable(h *messages.TableRow, rs []*messages.TableR
 	ws := r.getCellWidths(append([]*messages.TableRow{h}, rs...))
 
 	r.renderCells(h.Cells, ws)
-
-	s := "|"
-
-	for _, w := range ws {
-		s += strings.Repeat("-", w+2) + "|"
-	}
-
-	r.writeLine(s)
 
 	for _, t := range rs {
 		r.renderCells(t.Cells, ws)
@@ -201,19 +197,33 @@ func (renderer) getCellWidths(rs []*messages.TableRow) []int {
 
 func (r renderer) writeDescription(s string) {
 	if s != "" {
-		r.writeLine("")
 		r.writeLine(strings.TrimSpace(s))
+		r.writeLine("")
 	}
 }
 
-func (r renderer) writeHeadline(s string) {
-	r.writeLine(strings.Repeat("#", r.depth+1) + " " + s)
+func (r renderer) writeHeadline(s, t string) {
+	s += ":"
+
+	if t != "" {
+		s += " " + t
+	}
+
+	r.writeLine(s)
 }
 
 func (r renderer) writeLine(s string) {
+	if s != "" {
+		s = r.padding() + s
+	}
+
 	_, err := r.WriteString(s + "\n")
 
 	if err != nil {
 		panic(err)
 	}
+}
+
+func (r renderer) padding() string {
+	return strings.Repeat(INDENT, r.depth)
 }
