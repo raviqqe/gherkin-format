@@ -16,9 +16,11 @@ func main() {
 }
 
 func command(ss []string) error {
-	args := getArguments(ss)
+	args, err := GetArguments(ss)
 
-	if args.Path == "" {
+	if err != nil {
+		return err
+	} else if args.Path == "" {
 		return format(os.Stdin, os.Stdout)
 	}
 
