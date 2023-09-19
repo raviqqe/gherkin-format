@@ -112,3 +112,27 @@ Feature: Foo
 		})
 	}
 }
+
+func TestRendererRenderCodeBlockMultipleTimes(t *testing.T) {
+	s := strings.TrimSpace(`
+Feature: Foo
+  Scenario: Bar
+    Given Baz
+			"""foo
+    bar
+    """
+  `)
+	u := strings.TrimSpace(`
+Feature: Foo
+  Scenario: Bar
+    Given Baz
+    """foo
+    bar
+    """
+  `)
+
+	d, err := gherkin.ParseGherkinDocument(strings.NewReader(s), func() string { return "" })
+
+	assert.Nil(t, err)
+	assert.Equal(t, u+"\n", newRenderer().Render(d))
+}
