@@ -56,13 +56,13 @@ func formatPath(p string) error {
 	if err != nil {
 		return err
 	} else if s.IsDir() {
-		return FormatDirectory(p)
+		return formatDirectory(p)
 	}
 
-	return FormatFile(p)
+	return formatFile(p)
 }
 
-func FormatFile(s string) error {
+func formatFile(s string) error {
 	f, err := os.OpenFile(s, os.O_RDWR, 0644)
 
 	if err != nil {
@@ -91,7 +91,7 @@ func FormatFile(s string) error {
 	return err
 }
 
-func FormatDirectory(d string) error {
+func formatDirectory(d string) error {
 	w := sync.WaitGroup{}
 	es := make(chan error)
 
@@ -106,7 +106,7 @@ func FormatDirectory(d string) error {
 			go func() {
 				defer w.Done()
 
-				err := FormatFile(p)
+				err := formatFile(p)
 
 				if err != nil {
 					es <- err

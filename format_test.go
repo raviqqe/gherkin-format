@@ -21,7 +21,7 @@ func TestFormatPaths(t *testing.T) {
 	_, err = f.Write([]byte("Feature: Foo"))
 	assert.Nil(t, err)
 
-	assert.Nil(t, main.FormatFile(f.Name()))
+	assert.Nil(t, main.FormatPaths([]string{f.Name()}))
 }
 
 func TestFormatPathsError(t *testing.T) {
