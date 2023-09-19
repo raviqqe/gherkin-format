@@ -15,7 +15,7 @@ var docStringLineRegexp = regexp.MustCompile("(^|\n)([^\n])")
 var spaceRegexp = regexp.MustCompile(`\s+`)
 
 type renderer struct {
-	*strings.Builder
+	builder  *strings.Builder
 	depth    int
 	comments []*messages.Comment
 }
@@ -30,7 +30,7 @@ func (r *renderer) Render(d *messages.GherkinDocument) string {
 
 	r.renderFeature(d.Feature)
 
-	return r.Builder.String()
+	return r.builder.String()
 }
 
 func (r *renderer) renderFeature(f *messages.Feature) {
@@ -134,7 +134,7 @@ func (r *renderer) renderDocString(d *messages.DocString) {
 	r.writeLine(`"""` + d.MediaType)
 
 	if d.Content != "" {
-		r.WriteString(
+		r.builder.WriteString(
 			docStringLineRegexp.
 				ReplaceAllString(d.Content, "$1"+r.padding()+"$2") + "\n",
 		)
@@ -260,12 +260,12 @@ func (r renderer) writeHeadline(s, t string, l *messages.Location) {
 	r.writeLine(s)
 }
 
-func (r renderer) writeLine(s string) {
+func (r *renderer) writeLine(s string) {
 	if s != "" {
 		s = r.padding() + s
 	}
 
-	_, err := r.WriteString(s + "\n")
+	_, err := r.builder.WriteString(s + "\n")
 
 	if err != nil {
 		panic(err)
