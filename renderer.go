@@ -23,7 +23,7 @@ func (r *renderer) Render(d *messages.GherkinDocument) string {
 }
 
 func (r *renderer) renderFeature(f *messages.Feature) {
-	r.writeHeadline(f.Name)
+	r.writeHeadline("Feature", f.Name)
 
 	r.depth++
 	defer func() { r.depth-- }()
