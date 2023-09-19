@@ -118,6 +118,11 @@ Feature: Highlander
   Rule: There can be Two (in some cases)
     Scenario: Two -- Dead and Reborn as Phoenix
 		`,
+		`
+Feature: Foo
+	@foo @bar
+  Scenario Outline: Bar
+		`,
 	} {
 		s := strings.TrimSpace(s)
 
