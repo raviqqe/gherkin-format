@@ -13,7 +13,7 @@ func TestFormat(t *testing.T) {
 	assert.Nil(t, main.Format(bytes.NewBufferString("Feature: Foo"), bytes.NewBufferString("")))
 }
 
-func TestFormatPaths(t *testing.T) {
+func TestFormatFile(t *testing.T) {
 	f, err := os.CreateTemp("", "")
 	assert.Nil(t, err)
 	defer os.Remove(f.Name())
@@ -21,10 +21,10 @@ func TestFormatPaths(t *testing.T) {
 	_, err = f.Write([]byte("Feature: Foo"))
 	assert.Nil(t, err)
 
-	assert.Nil(t, main.FormatPaths([]string{f.Name()}))
+	assert.Nil(t, main.FormatFile(f.Name()))
 }
 
-func TestFormatPathsError(t *testing.T) {
+func TestFormatFileError(t *testing.T) {
 	f, err := os.CreateTemp("", "")
 	assert.Nil(t, err)
 	defer os.Remove(f.Name())
@@ -32,9 +32,9 @@ func TestFormatPathsError(t *testing.T) {
 	_, err = f.Write([]byte("Feature"))
 	assert.Nil(t, err)
 
-	assert.NotNil(t, main.FormatPaths([]string{f.Name()}))
+	assert.NotNil(t, main.FormatFile(f.Name()))
 }
 
-func TestFormatPathsWithNonReadableDirectory(t *testing.T) {
-	assert.NotNil(t, main.FormatPaths([]string{"foo"}))
+func TestFormatFilesWithNonReadableDirectory(t *testing.T) {
+	assert.NotNil(t, main.FormatFiles("foo"))
 }
