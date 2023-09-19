@@ -151,7 +151,7 @@ func (r *renderer) renderStep(s *messages.Step) {
 	r.depth++
 	defer func() {
 		r.depth--
-		r.renderAfterComments(s.Location)
+		r.renderAfterComments(stepLastLocation(s))
 	}()
 
 	if s.DataTable != nil {
@@ -267,4 +267,21 @@ func (r renderer) writeLine(s string) {
 
 func (r renderer) padding() string {
 	return strings.Repeat(INDENT, r.depth)
+}
+
+func stepLastLocation(s *messages.Step) *messages.Location {
+	l := s.Location
+
+	if s.DocString != nil {
+		l = &*s.DocString.Location
+		l.Line += int64(strings.Count(s.DocString.Content, "\n")) + 1
+	}
+
+	if s.DataTable != nil {
+		l = &*s.DataTable.Location
+		l.Line += int64(len(s.DataTable.Rows) - 1)
+
+	}
+
+	return l
 }

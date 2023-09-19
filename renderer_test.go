@@ -162,6 +162,44 @@ Feature: Foo
     # foo
     # bar
 		`,
+		`
+Feature: Foo
+  Scenario: Bar
+    Given Baz
+    """
+    """
+    # foo
+		`,
+		`
+Feature: Foo
+  Scenario: Bar
+    Given Baz
+    """
+    """
+    # foo
+
+  # bar
+  Scenario: Bar
+		`,
+		`
+Feature: Foo
+  Scenario: Bar
+    Given Baz
+      | foo |
+      | bar |
+    # foo
+		`,
+		`
+Feature: Foo
+  Scenario: Bar
+    Given Baz
+      | foo |
+      | bar |
+    # foo
+
+  # bar
+  Scenario: Bar
+		`,
 	} {
 		s := strings.TrimSpace(s)
 
