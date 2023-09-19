@@ -91,15 +91,17 @@ func (r *renderer) renderRule(l *messages.Rule) {
 
 	r.writeDescription(l.Description)
 
-	for _, c := range l.Children {
-		r.writeLine("")
-
+	for i, c := range l.Children {
 		if c.Background != nil {
 			r.renderBackground(c.Background)
 		}
 
 		if c.Scenario != nil {
 			r.renderScenario(c.Scenario)
+		}
+
+		if i != len(l.Children)-1 {
+			r.writeLine("")
 		}
 	}
 }
