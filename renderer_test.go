@@ -118,7 +118,7 @@ func TestRendererRenderCodeBlockMultipleTimes(t *testing.T) {
 Feature: Foo
   Scenario: Bar
     Given Baz
-			"""foo
+     """foo
     bar
     """
   `)
