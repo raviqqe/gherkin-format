@@ -206,12 +206,12 @@ func (r renderer) writeDescription(s string) {
 	}
 }
 
-func (r renderer) writeHeadline(s string) {
-	r.writeLine(strings.Repeat("#", r.depth+1) + " " + s)
+func (r renderer) writeHeadline(n, s string) {
+	r.writeLine(n + ": " + s)
 }
 
 func (r renderer) writeLine(s string) {
-	_, err := r.WriteString(s + "\n")
+	_, err := r.WriteString(strings.Repeat("  ", r.depth+1) + s + "\n")
 
 	if err != nil {
 		panic(err)
