@@ -123,6 +123,83 @@ Feature: Foo
   @foo @bar
   Scenario: Bar
 		`,
+		`
+# foo
+Feature: Foo
+		`,
+		`
+# foo
+# bar
+Feature: Foo
+		`,
+		`
+Feature: Foo
+  # foo
+  Scenario: Bar
+		`,
+		`
+Feature: Foo
+  # foo
+  # bar
+  Scenario: Bar
+		`,
+		`
+Feature: Foo
+  Scenario: Bar
+    # foo
+    Given Baz
+		`,
+		`
+Feature: Foo
+  Scenario: Bar
+    Given Baz
+    # foo
+		`,
+		`
+Feature: Foo
+  Scenario: Bar
+    Given Baz
+    # foo
+    # bar
+		`,
+		`
+Feature: Foo
+  Scenario: Bar
+    Given Baz
+    """
+    """
+    # foo
+		`,
+		`
+Feature: Foo
+  Scenario: Bar
+    Given Baz
+    """
+    """
+    # foo
+
+  # bar
+  Scenario: Bar
+		`,
+		`
+Feature: Foo
+  Scenario: Bar
+    Given Baz
+      | foo |
+      | bar |
+    # foo
+		`,
+		`
+Feature: Foo
+  Scenario: Bar
+    Given Baz
+      | foo |
+      | bar |
+    # foo
+
+  # bar
+  Scenario: Bar
+		`,
 	} {
 		s := strings.TrimSpace(s)
 
