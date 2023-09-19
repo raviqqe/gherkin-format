@@ -208,7 +208,7 @@ func (r renderer) renderCells(cs []*messages.TableCell, ws []int) {
 func (r *renderer) renderComments(l *messages.Location) {
 	for len(r.comments) > 0 && r.comments[len(r.comments)-1].Location.Line <= l.Line {
 		i := len(r.comments) - 1
-		r.writeLine(strings.TrimSpace(r.comments[i].Text))
+		r.renderComment(r.comments[i])
 		r.comments = r.comments[:i]
 	}
 }
@@ -217,10 +217,14 @@ func (r *renderer) renderAfterComments(l *messages.Location) {
 	for len(r.comments) > 0 && r.comments[len(r.comments)-1].Location.Line <= l.Line+1 {
 		i := len(r.comments) - 1
 		c := r.comments[i]
-		r.writeLine(strings.TrimSpace(c.Text))
+		r.renderComment(c)
 		r.comments = r.comments[:i]
 		l = c.Location
 	}
+}
+
+func (r *renderer) renderComment(c *messages.Comment) {
+	r.writeLine(normalizeText(c.Text))
 }
 
 func (renderer) getCellWidths(rs []*messages.TableRow) []int {
