@@ -19,6 +19,8 @@ go install github.com/raviqqe/gherkin-format@latest
 gherkin-format < file1.feature > file2.feature
 ```
 
+For more information, run `gherkin-format --help`.
+
 ## License
 
 [MIT](LICENSE)
