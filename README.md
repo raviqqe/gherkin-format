@@ -7,6 +7,15 @@
 
 Gherkin code formatter
 
+## Features
+
+- Keywords
+  - e.g. `Feature`, `Scenario`, `Background`, `Rule`, steps, ...
+- Tables
+  - Each column is aligned across rows.
+- Tags
+- Comments
+
 ## Install
 
 ```sh
