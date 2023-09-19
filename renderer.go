@@ -6,21 +6,27 @@ import (
 
 	"github.com/cucumber/messages/go/v22"
 	"github.com/willf/pad/utf8"
+	"golang.org/x/exp/slices"
 )
 
 const INDENT = "  "
 
 type renderer struct {
 	*strings.Builder
-	depth int
+	depth    int
+	comments []*messages.Comment
 }
 
 func newRenderer() *renderer {
-	return &renderer{&strings.Builder{}, 0}
+	return &renderer{&strings.Builder{}, 0, nil}
 }
 
 func (r *renderer) Render(d *messages.GherkinDocument) string {
+	r.comments = append([]*messages.Comment{}, d.Comments...)
+	slices.Reverse(r.comments)
+
 	r.renderFeature(d.Feature)
+	r.renderComments(d.Feature.Location)
 
 	return r.Builder.String()
 }
@@ -184,6 +190,16 @@ func (r renderer) renderDataTable(t *messages.DataTable) {
 }
 
 func (r renderer) renderCells(cs []*messages.TableCell, ws []int) {
+	s := "|"
+
+	for i, c := range cs {
+		s += " " + utf8.Right(c.Value, ws[i], " ") + " |"
+	}
+
+	r.writeLine(s)
+}
+
+func (r renderer) renderComments(l *messages.Location) {
 	s := "|"
 
 	for i, c := range cs {

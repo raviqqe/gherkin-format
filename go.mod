@@ -8,4 +8,5 @@ require (
 	github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815
 	github.com/stretchr/testify v1.8.4
 	github.com/willf/pad v0.0.0-20200313202418-172aa767f2a4
+	golang.org/x/exp v0.0.0-20230905200255-921286631fa9
 )
