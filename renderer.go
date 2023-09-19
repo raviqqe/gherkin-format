@@ -273,13 +273,15 @@ func stepLastLocation(s *messages.Step) *messages.Location {
 	l := s.Location
 
 	if s.DocString != nil {
-		l = &*s.DocString.Location
-		l.Line += int64(strings.Count(s.DocString.Content, "\n")) + 1
+		ll := *s.DocString.Location
+		ll.Line += int64(strings.Count(s.DocString.Content, "\n")) + 1
+		l = &ll
 	}
 
 	if s.DataTable != nil {
-		l = &*s.DataTable.Location
-		l.Line += int64(len(s.DataTable.Rows) - 1)
+		ll := *s.DataTable.Location
+		ll.Line += int64(len(s.DataTable.Rows) - 1)
+		l = &ll
 
 	}
 
