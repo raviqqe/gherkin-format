@@ -248,7 +248,7 @@ func (r renderer) writeDescription(s string) {
 	}
 }
 
-func (r renderer) writeHeadline(s, t string, l *messages.Location) {
+func (r *renderer) writeHeadline(s, t string, l *messages.Location) {
 	r.renderComments(l)
 
 	s += ":"
