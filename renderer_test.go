@@ -252,3 +252,23 @@ func TestRendererRenderTrimSpace(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, "Feature: foo bar baz\n", main.NewRenderer().Render(d))
 }
+
+func TestRendererRenderNoDuplicateCommentAmongScenarioAndStep(t *testing.T) {
+	s := strings.TrimSpace(`
+Feature: Foo
+  # foo
+  Scenario: Bar
+    Given Baz
+  `)
+	u := strings.TrimSpace(`
+Feature: Foo
+  # foo
+  Scenario: Bar
+    Given Baz
+  `)
+
+	d, err := gherkin.ParseGherkinDocument(strings.NewReader(s), func() string { return "" })
+
+	assert.Nil(t, err)
+	assert.Equal(t, u+"\n", main.NewRenderer().Render(d))
+}
