@@ -260,15 +260,9 @@ Feature: Foo
   Scenario: Bar
     Given Baz
   `)
-	u := strings.TrimSpace(`
-Feature: Foo
-  # foo
-  Scenario: Bar
-    Given Baz
-  `)
 
 	d, err := gherkin.ParseGherkinDocument(strings.NewReader(s), func() string { return "" })
 
 	assert.Nil(t, err)
-	assert.Equal(t, u+"\n", main.NewRenderer().Render(d))
+	assert.Equal(t, s+"\n", main.NewRenderer().Render(d))
 }
