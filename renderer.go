@@ -199,7 +199,11 @@ func (r renderer) renderCells(cs []*messages.TableCell, ws []int) {
 	s := "|"
 
 	for i, c := range cs {
-		s += " " + utf8.Right(c.Value, ws[i], " ") + " |"
+		v := strings.ReplaceAll(c.Value, "\\", "\\\\")
+		v = strings.ReplaceAll(v, "\n", "\\n")
+		v = regexp.MustCompile(`\\\\([a-z])`).ReplaceAllString(v, "\\$1")
+
+		s += " " + utf8.Right(v, ws[i], " ") + " |"
 	}
 
 	r.writeLine(s)
