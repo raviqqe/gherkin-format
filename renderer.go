@@ -201,7 +201,6 @@ func (r renderer) renderCells(cs []*messages.TableCell, ws []int) {
 	for i, c := range cs {
 		v := strings.ReplaceAll(c.Value, "\\", "\\\\")
 		v = strings.ReplaceAll(v, "\n", "\\n")
-		v = regexp.MustCompile(`\\\\([a-z])`).ReplaceAllString(v, "\\$1")
 
 		s += " " + utf8.Right(v, ws[i], " ") + " |"
 	}
