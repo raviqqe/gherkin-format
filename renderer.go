@@ -199,13 +199,13 @@ func (r renderer) renderCells(cs []*messages.TableCell, ws []int) {
 	s := "|"
 
 	for i, c := range cs {
-		v := strings.ReplaceAll(c.Value, "\\", "\\\\")
-		v = strings.ReplaceAll(v, "\n", "\\n")
-
-		s += " " + utf8.Right(v, ws[i], " ") + " |"
+		s += " " + utf8.Right(r.escapeCellValue(c), ws[i], " ") + " |"
 	}
 
 	r.writeLine(s)
+}
+func (renderer) escapeCellValue(c *messages.TableCell) string {
+	return strings.ReplaceAll(strings.ReplaceAll(c.Value, "\\", "\\\\"), "\n", "\\n")
 }
 
 func (r *renderer) renderComments(l *messages.Location) {
@@ -230,12 +230,12 @@ func (r *renderer) renderComment(c *messages.Comment) {
 	r.writeLine(normalizeText(c.Text))
 }
 
-func (renderer) getCellWidths(rs []*messages.TableRow) []int {
+func (r renderer) getCellWidths(rs []*messages.TableRow) []int {
 	ws := make([]int, len(rs[0].Cells))
 
-	for _, r := range rs {
-		for i, c := range r.Cells {
-			if w := len(c.Value); w > ws[i] {
+	for _, row := range rs {
+		for i, c := range row.Cells {
+			if w := len(r.escapeCellValue(c)); w > ws[i] {
 				ws[i] = w
 			}
 		}
