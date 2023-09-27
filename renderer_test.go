@@ -266,3 +266,23 @@ Feature: Foo
 	assert.Nil(t, err)
 	assert.Equal(t, s+"\n", main.NewRenderer().Render(d))
 }
+
+func TestRendererRenderEscapedCharacters(t *testing.T) {
+	s := strings.TrimSpace(`
+Feature: Foo
+  Scenario Outline: Bar
+    Given Put <value>
+
+    Examples:
+      | value |
+      | \n    |
+      | \t    |
+      | \r    |
+      | \\    |
+  `)
+
+	d, err := gherkin.ParseGherkinDocument(strings.NewReader(s), func() string { return "" })
+
+	assert.Nil(t, err)
+	assert.Equal(t, s+"\n", main.NewRenderer().Render(d))
+}
