@@ -274,11 +274,11 @@ Feature: Foo
     Given Put <value>
 
     Examples:
-      | value |
-      | \n    |
-      | \t    |
-      | \r    |
-      | \\    |
+      | value  |
+      | \n     |
+      | \\     |
+      | \\t    |
+      | \\r    |
   `)
 
 	d, err := gherkin.ParseGherkinDocument(strings.NewReader(s), func() string { return "" })
