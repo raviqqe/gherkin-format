@@ -205,7 +205,14 @@ func (r renderer) renderCells(cs []*messages.TableCell, ws []int) {
 	r.writeLine(s)
 }
 func (renderer) escapeCellValue(c *messages.TableCell) string {
-	return strings.ReplaceAll(strings.ReplaceAll(c.Value, "\\", "\\\\"), "\n", "\\n")
+	s := c.Value
+
+	s = strings.ReplaceAll(s, "\\\"", "\"")
+	s = strings.ReplaceAll(s, "\\", "\\\\")
+	s = strings.ReplaceAll(s, "\"", "\\\"")
+	s = strings.ReplaceAll(s, "\n", "\\n")
+
+	return s
 }
 
 func (r *renderer) renderComments(l *messages.Location) {

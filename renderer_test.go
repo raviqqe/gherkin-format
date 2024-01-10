@@ -276,6 +276,7 @@ Feature: Foo
     Examples:
       | value  |
       | \n     |
+      | \"     |
       | \\     |
       | \\t    |
       | \\r    |
