@@ -207,7 +207,9 @@ func (r renderer) renderCells(cs []*messages.TableCell, ws []int) {
 func (renderer) escapeCellValue(c *messages.TableCell) string {
 	s := c.Value
 
+	s = strings.ReplaceAll(s, "\\\"", "\"")
 	s = strings.ReplaceAll(s, "\\", "\\\\")
+	s = strings.ReplaceAll(s, "\"", "\\\"")
 	s = strings.ReplaceAll(s, "\n", "\\n")
 
 	return s
