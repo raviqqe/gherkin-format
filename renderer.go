@@ -131,6 +131,9 @@ func (r *renderer) renderSteps(ss []*messages.Step) {
 }
 
 func (r *renderer) renderDocString(d *messages.DocString) {
+	r.depth++
+	defer func() { r.depth-- }()
+
 	r.writeLine(`"""` + d.MediaType)
 
 	if d.Content != "" {

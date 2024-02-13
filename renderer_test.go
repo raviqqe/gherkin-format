@@ -27,9 +27,9 @@ Feature: Foo
 Feature: Foo
   Scenario: Bar
     When I do something:
-    """sh
-    foo
-    """
+      """sh
+      foo
+      """
 		`,
 		`
 Feature: Foo
@@ -167,25 +167,25 @@ Feature: Foo
 Feature: Foo
   Scenario: Bar
     Given Baz
-    """
-    """
+      """
+      """
     # foo
 		`,
 		`
 Feature: Foo
   Scenario: Bar
     Given Baz
-    """
-    foo
-    """
+      """
+      foo
+      """
     # foo
 		`,
 		`
 Feature: Foo
   Scenario: Bar
     Given Baz
-    """
-    """
+      """
+      """
     # foo
 
   # bar
@@ -227,17 +227,17 @@ func TestRendererRenderCodeBlockMultipleTimes(t *testing.T) {
 Feature: Foo
   Scenario: Bar
     Given Baz
-     """foo
-    bar
-    """
+       """foo
+      bar
+      """
   `)
 	u := strings.TrimSpace(`
 Feature: Foo
   Scenario: Bar
     Given Baz
-    """foo
-    bar
-    """
+      """foo
+      bar
+      """
   `)
 
 	d, err := gherkin.ParseGherkinDocument(strings.NewReader(s), func() string { return "" })
