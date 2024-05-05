@@ -106,6 +106,7 @@ func (r *renderer) renderScenario(s *messages.Scenario) {
 }
 
 func (r *renderer) renderRule(l *messages.Rule) {
+	r.renderTags(l.Tags)
 	r.writeHeadline("Rule", l.Name, l.Location)
 
 	r.depth++
