@@ -70,16 +70,20 @@ func (r *renderer) renderBackground(b *messages.Background) {
 	r.renderSteps(b.Steps)
 }
 
-func (r *renderer) renderScenario(s *messages.Scenario) {
-	if len(s.Tags) > 0 {
+func (r *renderer) renderTags(ts []*messages.Tag) {
+	if len(ts) > 0 {
 		ss := []string{}
 
-		for _, t := range s.Tags {
+		for _, t := range ts {
 			ss = append(ss, t.Name)
 		}
 
 		r.writeLine(strings.Join(ss, " "))
 	}
+}
+
+func (r *renderer) renderScenario(s *messages.Scenario) {
+	r.renderTags(s.Tags)
 
 	t := "Scenario"
 
@@ -102,6 +106,7 @@ func (r *renderer) renderScenario(s *messages.Scenario) {
 }
 
 func (r *renderer) renderRule(l *messages.Rule) {
+	r.renderTags(l.Tags)
 	r.writeHeadline("Rule", l.Name, l.Location)
 
 	r.depth++
