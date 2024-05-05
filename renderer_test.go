@@ -288,3 +288,18 @@ Feature: Foo
 	assert.Nil(t, err)
 	assert.Equal(t, s+"\n", main.NewRenderer().Render(d))
 }
+
+func TestRendererRenderRuleTags(t *testing.T) {
+	s := strings.TrimSpace(`
+Feature: Foo
+  @tag
+  Rule: Bar
+    Scenario: Baz
+      Given blah
+  `)
+
+	d, err := gherkin.ParseGherkinDocument(strings.NewReader(s), func() string { return "" })
+
+	assert.Nil(t, err)
+	assert.Equal(t, s+"\n", main.NewRenderer().Render(d))
+}
