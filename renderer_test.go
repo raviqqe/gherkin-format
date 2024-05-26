@@ -308,9 +308,8 @@ func TestRendererRenderFeatureTags(t *testing.T) {
 	s := strings.TrimSpace(`
 @tag
 Feature: Foo
-  Rule: Bar
-    Scenario: Baz
-      Given blah
+  Scenario: Baz
+    Given blah
   `)
 
 	d, err := gherkin.ParseGherkinDocument(strings.NewReader(s), func() string { return "" })
