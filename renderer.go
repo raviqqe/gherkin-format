@@ -34,6 +34,8 @@ func (r *renderer) Render(d *messages.GherkinDocument) string {
 }
 
 func (r *renderer) renderFeature(f *messages.Feature) {
+	r.renderTags(f.Tags)
+
 	r.writeHeadline("Feature", f.Name, f.Location)
 
 	r.depth++
