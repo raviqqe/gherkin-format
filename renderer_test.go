@@ -289,13 +289,12 @@ Feature: Foo
 	assert.Equal(t, s+"\n", main.NewRenderer().Render(d))
 }
 
-func TestRendererRenderRuleTags(t *testing.T) {
+func TestRendererRenderFeatureTags(t *testing.T) {
 	s := strings.TrimSpace(`
+@tag
 Feature: Foo
-  @tag
-  Rule: Bar
-    Scenario: Baz
-      Given blah
+  Scenario: Baz
+    Given blah
   `)
 
 	d, err := gherkin.ParseGherkinDocument(strings.NewReader(s), func() string { return "" })
@@ -304,12 +303,34 @@ Feature: Foo
 	assert.Equal(t, s+"\n", main.NewRenderer().Render(d))
 }
 
-func TestRendererRenderFeatureTags(t *testing.T) {
-	s := strings.TrimSpace(`
-@tag
+func TestRendererSortTags(t *testing.T) {
+	s := `
+@foo bar
 Feature: Foo
   Scenario: Baz
     Given blah
+  `
+
+	d, err := gherkin.ParseGherkinDocument(strings.NewReader(s), func() string { return "" })
+
+	assert.Nil(t, err)
+	assert.Equal(t,
+		strings.TrimSpace(`
+@bar @baz @foo
+Feature: Foo
+  Scenario: Baz
+    Given blah
+  `)+"\n",
+		main.NewRenderer().Render(d))
+}
+
+func TestRendererRenderRuleTags(t *testing.T) {
+	s := strings.TrimSpace(`
+Feature: Foo
+  @tag
+  Rule: Bar
+    Scenario: Baz
+      Given blah
   `)
 
 	d, err := gherkin.ParseGherkinDocument(strings.NewReader(s), func() string { return "" })
