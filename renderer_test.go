@@ -121,7 +121,7 @@ Feature: Highlander
 		`,
 		`
 Feature: Foo
-  @foo @bar
+  @abc @def
   Scenario: Bar
 		`,
 		`
