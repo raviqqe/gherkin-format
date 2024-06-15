@@ -305,7 +305,7 @@ Feature: Foo
 
 func TestRendererSortTags(t *testing.T) {
 	s := `
-@foo bar
+@foo @bar @baz
 Feature: Foo
   Scenario: Baz
     Given blah
