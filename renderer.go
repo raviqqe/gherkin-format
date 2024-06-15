@@ -80,6 +80,8 @@ func (r *renderer) renderTags(ts []*messages.Tag) {
 			ss = append(ss, t.Name)
 		}
 
+		slices.Sort(ss)
+
 		r.writeLine(strings.Join(ss, " "))
 	}
 }
