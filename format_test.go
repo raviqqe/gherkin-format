@@ -35,6 +35,17 @@ func TestFormatFileError(t *testing.T) {
 	assert.NotNil(t, main.FormatPaths([]string{f.Name()}))
 }
 
+func TestCheckPathsError(t *testing.T) {
+	f, err := os.CreateTemp("", "*.feature")
+	assert.Nil(t, err)
+	defer os.Remove(f.Name())
+
+	_, err = f.Write([]byte("Feature:   Foo"))
+	assert.Nil(t, err)
+
+	assert.NotNil(t, main.CheckPaths([]string{f.Name()}))
+}
+
 func TestFormatFilesWithNonReadableDirectory(t *testing.T) {
 	assert.NotNil(t, main.FormatPaths([]string{"foo"}))
 }
