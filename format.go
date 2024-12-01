@@ -96,8 +96,8 @@ func visitPaths(paths []string, visit func(string) error) error {
 			} else if i.IsDir() || filepath.Ext(p) != featureFileExtension {
 				return nil
 			}
-			w.Add(1)
 
+			w.Add(1)
 			go func() {
 				defer w.Done()
 
