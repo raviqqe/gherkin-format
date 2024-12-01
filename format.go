@@ -106,6 +106,8 @@ func visitPaths(paths []string, visit func(string) error) error {
 				}
 			}()
 
+			w.Wait()
+
 			return nil
 		}); err != nil {
 			return err
