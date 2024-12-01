@@ -87,10 +87,10 @@ func CheckPaths(paths []string) error {
 
 func visitPaths(paths []string, visit func(string) error) error {
 	w := sync.WaitGroup{}
-	es := make(chan error)
+	es := make(chan error, 64)
 
 	for _, p := range paths {
-		if err := filepath.Walk(p, func(p string, i os.FileInfo, err error) error {
+		err := filepath.Walk(p, func(p string, i os.FileInfo, err error) error {
 			if err != nil {
 				return err
 			} else if i.IsDir() || filepath.Ext(p) != featureFileExtension {
@@ -109,7 +109,9 @@ func visitPaths(paths []string, visit func(string) error) error {
 			w.Wait()
 
 			return nil
-		}); err != nil {
+		})
+
+		if err != nil {
 			return err
 		}
 	}
