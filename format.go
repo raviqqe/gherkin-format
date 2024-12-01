@@ -26,25 +26,21 @@ func Format(r io.Reader, w io.Writer) error {
 func FormatPaths(paths []string) error {
 	return visitPaths(paths, func(s string) error {
 		f, err := os.OpenFile(s, os.O_RDWR, 0644)
-
 		if err != nil {
 			return err
 		}
 
 		d, err := gherkin.ParseGherkinDocument(f, func() string { return s })
-
 		if err != nil {
 			return err
 		}
 
 		err = f.Truncate(0)
-
 		if err != nil {
 			return err
 		}
 
 		_, err = f.Seek(0, 0)
-
 		if err != nil {
 			return err
 		}
@@ -56,26 +52,22 @@ func FormatPaths(paths []string) error {
 
 func CheckPaths(paths []string) error {
 	return visitPaths(paths, func(s string) error {
-		f, err := os.OpenFile(s, os.O_RDWR, 0644)
-
+		f, err := os.OpenFile(s, os.O_RDONLY, 0644)
 		if err != nil {
 			return err
 		}
 
 		d, err := gherkin.ParseGherkinDocument(f, func() string { return s })
-
 		if err != nil {
 			return err
 		}
 
 		err = f.Truncate(0)
-
 		if err != nil {
 			return err
 		}
 
 		_, err = f.Seek(0, 0)
-
 		if err != nil {
 			return err
 		}
@@ -110,7 +102,6 @@ func visitPaths(paths []string, visit func(string) error) error {
 
 			return nil
 		})
-
 		if err != nil {
 			return err
 		}
