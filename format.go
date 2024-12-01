@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"io"
@@ -25,13 +26,13 @@ func Format(r io.Reader, w io.Writer) error {
 }
 
 func FormatPaths(paths []string) error {
-	return visitPaths(paths, func(s string) error {
-		f, err := os.OpenFile(s, os.O_RDWR, 0644)
+	return visitPaths(paths, func(p string) error {
+		f, err := os.OpenFile(p, os.O_RDWR, 0644)
 		if err != nil {
 			return err
 		}
 
-		d, err := gherkin.ParseGherkinDocument(f, func() string { return s })
+		d, err := gherkin.ParseGherkinDocument(f, func() string { return p })
 		if err != nil {
 			return err
 		}
@@ -52,29 +53,22 @@ func FormatPaths(paths []string) error {
 }
 
 func CheckPaths(paths []string) error {
-	return visitPaths(paths, func(s string) error {
-		f, err := os.OpenFile(s, os.O_RDONLY, 0644)
+	return visitPaths(paths, func(p string) error {
+		bs, err := os.ReadFile(p)
 		if err != nil {
 			return err
 		}
 
-		d, err := gherkin.ParseGherkinDocument(f, func() string { return s })
+		d, err := gherkin.ParseGherkinDocument(bytes.NewReader(bs), func() string { return p })
 		if err != nil {
 			return err
 		}
 
-		err = f.Truncate(0)
-		if err != nil {
-			return err
+		if string(bs) != NewRenderer().Render(d) {
+			return errors.New("file not formatted: p")
 		}
 
-		_, err = f.Seek(0, 0)
-		if err != nil {
-			return err
-		}
-
-		_, err = fmt.Fprint(f, NewRenderer().Render(d))
-		return err
+		return nil
 	})
 }
 
