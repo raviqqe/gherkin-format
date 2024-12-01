@@ -7,13 +7,15 @@ import (
 const usage = `Gherkin code formatter
 
 Usage:
-	gherkin-format [<path>]
+	gherkin-format <path>...
 
 Options:
-	-h, --help  Show this help.`
+	-c, --check  Check if files are formatted correctly.
+	-h, --help   Show this help.`
 
 type Arguments struct {
-	Path string `docopt:"<path>"`
+	Check bool     `docopt:"-c"`
+	Paths []string `docopt:"<path>"`
 }
 
 func GetArguments(ss []string) (Arguments, error) {

@@ -23,63 +23,95 @@ func Format(r io.Reader, w io.Writer) error {
 	return err
 }
 
-func FormatFile(s string) error {
-	f, err := os.OpenFile(s, os.O_RDWR, 0644)
+func FormatPaths(paths []string) error {
+	return visitPaths(paths, func(s string) error {
+		f, err := os.OpenFile(s, os.O_RDWR, 0644)
 
-	if err != nil {
-		return err
-	}
-
-	d, err := gherkin.ParseGherkinDocument(f, func() string { return s })
-
-	if err != nil {
-		return err
-	}
-
-	err = f.Truncate(0)
-
-	if err != nil {
-		return err
-	}
-
-	_, err = f.Seek(0, 0)
-
-	if err != nil {
-		return err
-	}
-
-	_, err = fmt.Fprint(f, NewRenderer().Render(d))
-	return err
-}
-
-func FormatFiles(d string) error {
-	w := sync.WaitGroup{}
-	es := make(chan error)
-
-	err := filepath.Walk(d, func(p string, i os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
 
-		if !i.IsDir() && filepath.Ext(p) == featureFileExtension {
+		d, err := gherkin.ParseGherkinDocument(f, func() string { return s })
+
+		if err != nil {
+			return err
+		}
+
+		err = f.Truncate(0)
+
+		if err != nil {
+			return err
+		}
+
+		_, err = f.Seek(0, 0)
+
+		if err != nil {
+			return err
+		}
+
+		_, err = fmt.Fprint(f, NewRenderer().Render(d))
+		return err
+	})
+}
+
+func CheckPaths(paths []string) error {
+	return visitPaths(paths, func(s string) error {
+		f, err := os.OpenFile(s, os.O_RDWR, 0644)
+
+		if err != nil {
+			return err
+		}
+
+		d, err := gherkin.ParseGherkinDocument(f, func() string { return s })
+
+		if err != nil {
+			return err
+		}
+
+		err = f.Truncate(0)
+
+		if err != nil {
+			return err
+		}
+
+		_, err = f.Seek(0, 0)
+
+		if err != nil {
+			return err
+		}
+
+		_, err = fmt.Fprint(f, NewRenderer().Render(d))
+		return err
+	})
+}
+
+func visitPaths(paths []string, visit func(string) error) error {
+	w := sync.WaitGroup{}
+	es := make(chan error)
+
+	for _, p := range paths {
+		if err := filepath.Walk(p, func(p string, i os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			} else if i.IsDir() || filepath.Ext(p) != featureFileExtension {
+				return nil
+			}
 			w.Add(1)
 
 			go func() {
 				defer w.Done()
 
-				err := FormatFile(p)
+				err := visit(p)
 
 				if err != nil {
 					es <- err
 				}
 			}()
+
+			return nil
+		}); err != nil {
+			return err
 		}
-
-		return nil
-	})
-
-	if err != nil {
-		return err
 	}
 
 	w.Wait()
