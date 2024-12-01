@@ -10,6 +10,7 @@ import (
 	"sync"
 
 	"github.com/cucumber/gherkin/go/v27"
+	"github.com/samber/lo"
 )
 
 const featureFileExtension = ".feature"
@@ -107,14 +108,8 @@ func visitPaths(paths []string, visit func(string) error) error {
 		close(es)
 	}()
 
-	ees := []error{}
-
-	for e := range es {
-		ees = append(ees, e)
-	}
-
-	if len(ees) > 0 {
-		return errors.Join(ees...)
+	if es := lo.ChannelToSlice(es); len(es) > 0 {
+		return errors.Join(es...)
 	}
 
 	return nil
