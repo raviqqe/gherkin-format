@@ -18,10 +18,24 @@ func TestFormatPaths(t *testing.T) {
 	assert.Nil(t, err)
 	defer os.Remove(f.Name())
 
-	_, err = f.Write([]byte("Feature: Foo"))
+	_, err = f.Write([]byte("Feature:   Foo"))
 	assert.Nil(t, err)
 
 	assert.Nil(t, main.FormatPaths([]string{f.Name()}))
+	bs, err := os.ReadFile(f.Name())
+	assert.Nil(t, err)
+	assert.Equal(t, "Feature: Foo\n", string(bs))
+}
+
+func TestCheckPaths(t *testing.T) {
+	f, err := os.CreateTemp("", "*.feature")
+	assert.Nil(t, err)
+	defer os.Remove(f.Name())
+
+	_, err = f.Write([]byte("Feature: Foo\n"))
+	assert.Nil(t, err)
+
+	assert.Nil(t, main.CheckPaths([]string{f.Name()}))
 }
 
 func TestFormatPathsError(t *testing.T) {
