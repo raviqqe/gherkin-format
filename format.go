@@ -101,9 +101,7 @@ func visitPaths(paths []string, visit func(string) error) error {
 			go func() {
 				defer w.Done()
 
-				err := visit(p)
-
-				if err != nil {
+				if err := visit(p); err != nil {
 					es <- err
 				}
 			}()

@@ -21,7 +21,7 @@ func TestFormatFile(t *testing.T) {
 	_, err = f.Write([]byte("Feature: Foo"))
 	assert.Nil(t, err)
 
-	assert.Nil(t, main.FormatFile(f.Name()))
+	assert.Nil(t, main.FormatPaths([]string{f.Name()}))
 }
 
 func TestFormatFileError(t *testing.T) {
@@ -32,9 +32,9 @@ func TestFormatFileError(t *testing.T) {
 	_, err = f.Write([]byte("Feature"))
 	assert.Nil(t, err)
 
-	assert.NotNil(t, main.FormatFile(f.Name()))
+	assert.NotNil(t, main.FormatPaths([]string{f.Name()}))
 }
 
 func TestFormatFilesWithNonReadableDirectory(t *testing.T) {
-	assert.NotNil(t, main.FormatFiles("foo"))
+	assert.NotNil(t, main.FormatPaths([]string{"foo"}))
 }

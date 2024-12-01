@@ -7,7 +7,7 @@ import (
 const usage = `Gherkin code formatter
 
 Usage:
-	gherkin-format <path>...
+	gherkin-format [<path>...]
 
 Options:
 	-c, --check  Check if files are formatted correctly.
