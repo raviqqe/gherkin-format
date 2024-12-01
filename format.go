@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -107,10 +108,19 @@ func visitPaths(paths []string, visit func(string) error) error {
 		}
 	}
 
-	w.Wait()
+	go func() {
+		w.Wait()
+		close(es)
+	}()
 
-	if len(es) != 0 {
-		return <-es
+	ees := []error{}
+
+	for e := range es {
+		ees = append(ees, e)
+	}
+
+	if len(ees) > 0 {
+		return errors.Join(ees...)
 	}
 
 	return nil
