@@ -1,33 +1,24 @@
 package main
 
 import (
-	"github.com/docopt/docopt-go"
+	"flag"
+	"os"
 )
 
-const usage = `Gherkin code formatter
-
-Usage:
-	gherkin-format [<path>]
-
-Options:
-	-h, --help  Show this help.`
-
 type Arguments struct {
-	Path string `docopt:"<path>"`
+	Check bool
+	Paths []string
 }
 
 func GetArguments(ss []string) (Arguments, error) {
-	args := Arguments{}
-	err := parseArguments(usage, ss, &args)
-	return args, err
-}
+	s := flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
+	c := s.Bool("check", false, "Check if files are formatted correctly.")
 
-func parseArguments(u string, ss []string, args interface{}) error {
-	opts, err := docopt.ParseArgs(u, ss, "")
+	err := s.Parse(ss)
 
 	if err != nil {
-		return err
+		return Arguments{}, err
 	}
 
-	return opts.Bind(args)
+	return Arguments{Check: *c, Paths: s.Args()}, nil
 }

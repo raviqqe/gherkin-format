@@ -13,28 +13,57 @@ func TestFormat(t *testing.T) {
 	assert.Nil(t, main.Format(bytes.NewBufferString("Feature: Foo"), bytes.NewBufferString("")))
 }
 
-func TestFormatFile(t *testing.T) {
-	f, err := os.CreateTemp("", "")
+func TestFormatPaths(t *testing.T) {
+	f, err := os.CreateTemp("", "*.feature")
 	assert.Nil(t, err)
 	defer os.Remove(f.Name())
 
-	_, err = f.Write([]byte("Feature: Foo"))
+	_, err = f.Write([]byte("Feature:   Foo"))
 	assert.Nil(t, err)
 
-	assert.Nil(t, main.FormatFile(f.Name()))
+	assert.Nil(t, main.FormatPaths([]string{f.Name()}))
+	bs, err := os.ReadFile(f.Name())
+	assert.Nil(t, err)
+	assert.Equal(t, "Feature: Foo\n", string(bs))
 }
 
-func TestFormatFileError(t *testing.T) {
-	f, err := os.CreateTemp("", "")
+func TestCheckPaths(t *testing.T) {
+	f, err := os.CreateTemp("", "*.feature")
+	assert.Nil(t, err)
+	defer os.Remove(f.Name())
+
+	_, err = f.Write([]byte("Feature: Foo\n"))
+	assert.Nil(t, err)
+
+	assert.Nil(t, main.CheckPaths([]string{f.Name()}))
+}
+
+func TestFormatPathsError(t *testing.T) {
+	f, err := os.CreateTemp("", "*.feature")
 	assert.Nil(t, err)
 	defer os.Remove(f.Name())
 
 	_, err = f.Write([]byte("Feature"))
 	assert.Nil(t, err)
 
-	assert.NotNil(t, main.FormatFile(f.Name()))
+	assert.NotNil(t, main.FormatPaths([]string{f.Name()}))
 }
 
-func TestFormatFilesWithNonReadableDirectory(t *testing.T) {
-	assert.NotNil(t, main.FormatFiles("foo"))
+func TestCheckPathsError(t *testing.T) {
+	f, err := os.CreateTemp("", "*.feature")
+	assert.Nil(t, err)
+	defer os.Remove(f.Name())
+
+	_, err = f.Write([]byte("Feature:   Foo"))
+	assert.Nil(t, err)
+
+	assert.NotNil(t, main.CheckPaths([]string{f.Name()}))
+}
+
+func TestFormatPathsWithNonReadableDirectory(t *testing.T) {
+	assert.NotNil(t, main.FormatPaths([]string{"foo"}))
+}
+
+func TestCheckPathsWithNonReadableDirectory(t *testing.T) {
+	assert.NotNil(t, main.CheckPaths([]string{"foo"}))
 }
