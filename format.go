@@ -66,7 +66,7 @@ func CheckPaths(paths []string) error {
 		}
 
 		if string(bs) != NewRenderer().Render(d) {
-			return errors.New("file not formatted: p")
+			return fmt.Errorf("file not formatted: %v", p)
 		}
 
 		return nil
