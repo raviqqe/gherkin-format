@@ -16,7 +16,7 @@ func TestFormat(t *testing.T) {
 func TestFormatPaths(t *testing.T) {
 	f, err := os.CreateTemp("", "*.feature")
 	assert.Nil(t, err)
-	defer os.Remove(f.Name())
+	defer func() { assert.Nil(t, os.Remove(f.Name())) }()
 
 	_, err = f.Write([]byte("Feature:   Foo"))
 	assert.Nil(t, err)
@@ -30,7 +30,7 @@ func TestFormatPaths(t *testing.T) {
 func TestCheckPaths(t *testing.T) {
 	f, err := os.CreateTemp("", "*.feature")
 	assert.Nil(t, err)
-	defer os.Remove(f.Name())
+	defer func() { assert.Nil(t, os.Remove(f.Name())) }()
 
 	_, err = f.Write([]byte("Feature: Foo\n"))
 	assert.Nil(t, err)
@@ -41,7 +41,7 @@ func TestCheckPaths(t *testing.T) {
 func TestFormatPathsError(t *testing.T) {
 	f, err := os.CreateTemp("", "*.feature")
 	assert.Nil(t, err)
-	defer os.Remove(f.Name())
+	defer func() { assert.Nil(t, os.Remove(f.Name())) }()
 
 	_, err = f.Write([]byte("Feature"))
 	assert.Nil(t, err)
@@ -52,7 +52,7 @@ func TestFormatPathsError(t *testing.T) {
 func TestCheckPathsError(t *testing.T) {
 	f, err := os.CreateTemp("", "*.feature")
 	assert.Nil(t, err)
-	defer os.Remove(f.Name())
+	defer func() { assert.Nil(t, os.Remove(f.Name())) }()
 
 	_, err = f.Write([]byte("Feature:   Foo"))
 	assert.Nil(t, err)

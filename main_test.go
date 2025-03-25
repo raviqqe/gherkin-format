@@ -18,7 +18,7 @@ func TestCommand(t *testing.T) {
 
 	assert.Nil(t, main.Run([]string{f.Name()}))
 
-	os.Remove(f.Name())
+	assert.Nil(t, os.Remove(f.Name()))
 }
 
 func TestCommandWithNonExistentFile(t *testing.T) {
@@ -39,5 +39,5 @@ func TestCommandWithDirectory(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, "Feature: Foo\n", string(bs))
 
-	os.RemoveAll(d)
+	assert.Nil(t, os.RemoveAll(d))
 }
