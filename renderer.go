@@ -176,6 +176,7 @@ func (r *renderer) renderStep(s *messages.Step) {
 
 func (r *renderer) renderExamples(es []*messages.Examples) {
 	for i, e := range es {
+		r.renderTags(e.Tags)
 		r.writeHeadline("Examples", e.Name, e.Location)
 
 		r.depth++
