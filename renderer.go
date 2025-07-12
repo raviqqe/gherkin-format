@@ -222,6 +222,7 @@ func (renderer) escapeCellValue(c *messages.TableCell) string {
 
 	s = strings.ReplaceAll(s, "\\", "\\\\")
 	s = strings.ReplaceAll(s, "\n", "\\n")
+	s = strings.ReplaceAll(s, "|", "\\|")
 
 	return s
 }
