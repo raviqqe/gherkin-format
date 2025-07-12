@@ -103,6 +103,23 @@ Feature: Foo
       | coding    |
 		`,
 		`
+Feature: Foo
+  Scenario Outline: Bar
+    When <someone> does <something>.
+
+    @baz
+    Examples: Baz
+      | someone |
+      | I       |
+      | You     |
+
+    @blah
+    Examples: Blah
+      | something |
+      | cooking   |
+      | coding    |
+		`,
+		`
 Feature: Highlander
   Rule: There can be only One
     Scenario: Only One -- More than one alive
