@@ -5,7 +5,7 @@ on:
       - main
   pull_request:
 jobs:
-  test:
+  unit_test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,3 +20,11 @@ jobs:
       - uses: streetsidesoftware/cspell-action@v7
         with:
           files: "**/*.{md,go}"
+  test:
+    needs:
+      - unit_test
+      - spell_check
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - run: for result in ${{ join(needs.*.result, ' ') }}; do [ $result = success ]; done
