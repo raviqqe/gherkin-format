@@ -18,6 +18,7 @@ func TestRendererRender(t *testing.T) {
 		"Feature: Foo",
 		`
 Feature: Foo
+
   Scenario: Bar
     Given that
     When I do something
@@ -25,6 +26,7 @@ Feature: Foo
 		`,
 		`
 Feature: Foo
+
   Scenario: Bar
     When I do something:
       """sh
@@ -33,12 +35,14 @@ Feature: Foo
 		`,
 		`
 Feature: Foo
+
   bar
 
   Scenario: Bar
 		`,
 		`
 Feature: Foo
+
   Scenario: Bar
     baz
 
@@ -46,10 +50,12 @@ Feature: Foo
 		`,
 		`
 Feature: Foo
+
   Background: Bar
     When I do something`,
 		`
 Feature: Foo
+
   Background: Bar
     Given Baz:
       | foo |
@@ -57,6 +63,7 @@ Feature: Foo
 		`,
 		`
 Feature: Foo
+
   Scenario Outline: Bar
     When <someone> does <something>.
 
@@ -67,6 +74,7 @@ Feature: Foo
 		`,
 		`
 Feature: Foo
+
   Scenario Outline: Bar
     When <someone> does <something>.
 
@@ -77,6 +85,7 @@ Feature: Foo
 		`,
 		`
 Feature: Foo
+
   Scenario Outline: Bar
     When <someone> does <something>.
 
@@ -89,6 +98,7 @@ Feature: Foo
 		`,
 		`
 Feature: Foo
+
   Scenario Outline: Bar
     When <someone> does <something>.
 
@@ -104,6 +114,7 @@ Feature: Foo
 		`,
 		`
 Feature: Foo
+
   Scenario Outline: Bar
     When <someone> does <something>.
 
@@ -121,6 +132,7 @@ Feature: Foo
 		`,
 		`
 Feature: Highlander
+
   Rule: There can be only One
     Scenario: Only One -- More than one alive
       Given there are 3 ninjas
@@ -138,6 +150,7 @@ Feature: Highlander
 		`,
 		`
 Feature: Foo
+
   @abc @def
   Scenario: Bar
 		`,
@@ -152,29 +165,34 @@ Feature: Foo
 		`,
 		`
 Feature: Foo
+
   # foo
   Scenario: Bar
 		`,
 		`
 Feature: Foo
+
   # foo
   # bar
   Scenario: Bar
 		`,
 		`
 Feature: Foo
+
   Scenario: Bar
     # foo
     Given Baz
 		`,
 		`
 Feature: Foo
+
   Scenario: Bar
     Given Baz
     # foo
 		`,
 		`
 Feature: Foo
+
   Scenario: Bar
     Given Baz
     # foo
@@ -182,6 +200,7 @@ Feature: Foo
 		`,
 		`
 Feature: Foo
+
   Scenario: Bar
     Given Baz
       """
@@ -190,6 +209,7 @@ Feature: Foo
 		`,
 		`
 Feature: Foo
+
   Scenario: Bar
     Given Baz
       """
@@ -199,6 +219,7 @@ Feature: Foo
 		`,
 		`
 Feature: Foo
+
   Scenario: Bar
     Given Baz
       """
@@ -210,6 +231,7 @@ Feature: Foo
 		`,
 		`
 Feature: Foo
+
   Scenario: Bar
     Given Baz
       | foo |
@@ -218,6 +240,7 @@ Feature: Foo
 		`,
 		`
 Feature: Foo
+
   Scenario: Bar
     Given Baz
       | foo |
@@ -242,6 +265,7 @@ Feature: Foo
 func TestRendererRenderCodeBlockMultipleTimes(t *testing.T) {
 	s := strings.TrimSpace(`
 Feature: Foo
+
   Scenario: Bar
     Given Baz
        """foo
@@ -250,6 +274,7 @@ Feature: Foo
   `)
 	u := strings.TrimSpace(`
 Feature: Foo
+
   Scenario: Bar
     Given Baz
       """foo
@@ -273,6 +298,7 @@ func TestRendererRenderTrimSpace(t *testing.T) {
 func TestRendererRenderNoDuplicateCommentAmongScenarioAndStep(t *testing.T) {
 	s := strings.TrimSpace(`
 Feature: Foo
+
   # foo
   Scenario: Bar
     Given Baz
@@ -287,6 +313,7 @@ Feature: Foo
 func TestRendererRenderEscapedCharacters(t *testing.T) {
 	s := strings.TrimSpace(`
 Feature: Foo
+
   Scenario Outline: Bar
     Given Put <value>
 
@@ -311,6 +338,7 @@ func TestRendererRenderFeatureTags(t *testing.T) {
 	s := strings.TrimSpace(`
 @tag
 Feature: Foo
+
   Scenario: Baz
     Given blah
   `)
@@ -336,6 +364,7 @@ Feature: Foo
 		strings.TrimSpace(`
 @bar @baz @foo
 Feature: Foo
+
   Scenario: Baz
     Given blah
   `)+"\n",
@@ -345,6 +374,7 @@ Feature: Foo
 func TestRendererRenderRuleTags(t *testing.T) {
 	s := strings.TrimSpace(`
 Feature: Foo
+
   @tag
   Rule: Bar
     Scenario: Baz
