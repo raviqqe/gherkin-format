@@ -38,6 +38,12 @@ func (r *renderer) renderFeature(f *messages.Feature) {
 
 	r.writeHeadline("Feature", f.Name, f.Location)
 
+	if len(f.Children) == 0 {
+		return
+	}
+
+	r.writeLine("")
+
 	r.depth++
 	defer func() { r.depth-- }()
 
