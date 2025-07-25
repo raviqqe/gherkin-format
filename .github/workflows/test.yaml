@@ -5,7 +5,7 @@ on:
       - main
   pull_request:
 jobs:
-  test:
+  unit_test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -13,3 +13,18 @@ jobs:
       - uses: golangci/golangci-lint-action@v8
       - run: go test -covermode atomic -coverprofile coverage.txt
       - uses: codecov/codecov-action@v5
+  spell_check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: streetsidesoftware/cspell-action@v7
+        with:
+          files: "**/*.{md,go}"
+  test:
+    needs:
+      - unit_test
+      - spell_check
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - run: for result in ${{ join(needs.*.result, ' ') }}; do [ $result = success ]; done
