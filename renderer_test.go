@@ -134,6 +134,7 @@ Feature: Foo
 Feature: Highlander
 
   Rule: There can be only One
+
     Scenario: Only One -- More than one alive
       Given there are 3 ninjas
       And there are more than one ninja alive
@@ -146,6 +147,7 @@ Feature: Highlander
       Then he (or she) will live forever ;-)
 
   Rule: There can be Two (in some cases)
+
     Scenario: Two -- Dead and Reborn as Phoenix
 		`,
 		`
@@ -377,6 +379,7 @@ Feature: Foo
 
   @tag
   Rule: Bar
+
     Scenario: Baz
       Given blah
   `)
