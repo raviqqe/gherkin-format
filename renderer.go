@@ -196,6 +196,10 @@ func (r *renderer) renderExamples(es []*messages.Examples) {
 
 		r.depth++
 		r.writeDescription(e.Description)
+		if e.Description != "" {
+			r.writeLine("")
+		}
+
 		r.renderExampleTable(e.TableHeader, e.TableBody)
 		r.depth--
 
