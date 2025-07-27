@@ -35,19 +35,18 @@ func (r *renderer) Render(d *messages.GherkinDocument) string {
 
 func (r *renderer) renderFeature(f *messages.Feature) {
 	r.renderTags(f.Tags)
-
 	r.writeHeadline("Feature", f.Name, f.Location)
+
+	r.depth++
+	defer func() { r.depth-- }()
+
+	r.writeDescription(f.Description)
 
 	if len(f.Children) == 0 {
 		return
 	}
 
 	r.writeLine("")
-
-	r.depth++
-	defer func() { r.depth-- }()
-
-	r.writeDescription(f.Description)
 
 	for i, c := range f.Children {
 		if c.Background != nil {
@@ -107,6 +106,10 @@ func (r *renderer) renderScenario(s *messages.Scenario) {
 	defer func() { r.depth-- }()
 
 	r.writeDescription(s.Description)
+	if s.Description != "" {
+		r.writeLine("")
+	}
+
 	r.renderSteps(s.Steps)
 
 	if len(s.Examples) != 0 {
@@ -123,6 +126,12 @@ func (r *renderer) renderRule(l *messages.Rule) {
 	defer func() { r.depth-- }()
 
 	r.writeDescription(l.Description)
+
+	if len(l.Children) == 0 {
+		return
+	}
+
+	r.writeLine("")
 
 	for i, c := range l.Children {
 		if c.Background != nil {
@@ -187,6 +196,10 @@ func (r *renderer) renderExamples(es []*messages.Examples) {
 
 		r.depth++
 		r.writeDescription(e.Description)
+		if e.Description != "" {
+			r.writeLine("")
+		}
+
 		r.renderExampleTable(e.TableHeader, e.TableBody)
 		r.depth--
 
@@ -272,7 +285,6 @@ func (r renderer) getCellWidths(rs []*messages.TableRow) []int {
 func (r renderer) writeDescription(s string) {
 	if s != "" {
 		r.writeLine(strings.TrimSpace(s))
-		r.writeLine("")
 	}
 }
 
