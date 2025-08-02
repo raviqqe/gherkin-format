@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-const version = "0.1.1"
+const Version = "0.1.1"
 
 func main() {
 	if err := Run(os.Args[1:], os.Stdout); err != nil {
@@ -24,7 +24,7 @@ func Run(ss []string, o io.Writer) error {
 	if err != nil {
 		return err
 	} else if args.Version {
-		_, err := fmt.Fprintln(o, version)
+		_, err := fmt.Fprintln(o, Version)
 		return err
 	} else if len(args.Paths) == 0 {
 		return Format(os.Stdin, os.Stdout)
