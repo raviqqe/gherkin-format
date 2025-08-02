@@ -18,13 +18,13 @@ func main() {
 	}
 }
 
-func Run(ss []string, w io.Writer) error {
+func Run(ss []string, o io.Writer) error {
 	args, err := GetArguments(ss)
 
 	if err != nil {
 		return err
 	} else if args.Version {
-		_, err := fmt.Fprintln(w, version)
+		_, err := fmt.Fprintln(o, version)
 		return err
 	} else if len(args.Paths) == 0 {
 		return Format(os.Stdin, os.Stdout)
