@@ -1,6 +1,8 @@
 package main_test
 
 import (
+	"bytes"
+	"io"
 	"os"
 	"path/filepath"
 	"testing"
@@ -16,13 +18,13 @@ func TestCommand(t *testing.T) {
 	_, err = f.WriteString("Feature: Foo")
 	assert.Nil(t, err)
 
-	assert.Nil(t, main.Run([]string{f.Name()}))
+	assert.Nil(t, main.Run([]string{f.Name()}, io.Discard))
 
 	assert.Nil(t, os.Remove(f.Name()))
 }
 
 func TestCommandWithNonExistentFile(t *testing.T) {
-	assert.NotNil(t, main.Run([]string{"non-existent.feature"}))
+	assert.NotNil(t, main.Run([]string{"non-existent.feature"}, io.Discard))
 }
 
 func TestCommandWithDirectory(t *testing.T) {
@@ -33,7 +35,7 @@ func TestCommandWithDirectory(t *testing.T) {
 	err = os.WriteFile(f, []byte("Feature:  Foo"), 0600)
 	assert.Nil(t, err)
 
-	assert.Nil(t, main.Run([]string{d}))
+	assert.Nil(t, main.Run([]string{d}, io.Discard))
 
 	bs, err := os.ReadFile(f)
 	assert.Nil(t, err)
@@ -43,5 +45,8 @@ func TestCommandWithDirectory(t *testing.T) {
 }
 
 func TestCommandVersion(t *testing.T) {
-	assert.Nil(t, main.Run([]string{"-version"}))
+	b := bytes.NewBuffer(nil)
+
+	assert.Nil(t, main.Run([]string{"-version"}, b))
+	assert.Equal(t, "0.1.0\n", b.String())
 }

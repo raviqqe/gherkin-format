@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
 )
 
 const version = "0.1.0"
 
 func main() {
-	if err := Run(os.Args[1:]); err != nil {
+	if err := Run(os.Args[1:], os.Stdout); err != nil {
 		if _, err := fmt.Fprintln(os.Stderr, err); err != nil {
 			panic(err)
 		}
@@ -17,13 +18,13 @@ func main() {
 	}
 }
 
-func Run(ss []string) error {
+func Run(ss []string, w io.Writer) error {
 	args, err := GetArguments(ss)
 
 	if err != nil {
 		return err
 	} else if args.Version {
-		_, err := fmt.Println(version)
+		_, err := fmt.Fprintln(w, version)
 		return err
 	} else if len(args.Paths) == 0 {
 		return Format(os.Stdin, os.Stdout)
