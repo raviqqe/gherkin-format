@@ -3,6 +3,7 @@
     "covermode",
     "coverprofile",
     "golangci",
+    "goreleaser",
     "raviqqe",
     "samber",
     "stretchr",
