@@ -18,10 +18,9 @@ func createTempFeature(t *testing.T) *os.File {
 }
 
 func TestCommand(t *testing.T) {
-	f, err := os.CreateTemp("", "")
-	assert.Nil(t, err)
+	f := createTempFeature(t)
 
-	_, err = f.WriteString("Feature: Foo")
+	_, err := f.WriteString("Feature: Foo")
 	assert.Nil(t, err)
 
 	assert.Nil(t, main.Run([]string{f.Name()}, io.Discard))
@@ -51,10 +50,9 @@ func TestCommandWithDirectory(t *testing.T) {
 }
 
 func TestCommandCheckSuccess(t *testing.T) {
-	f, err := os.CreateTemp("", "")
-	assert.Nil(t, err)
+	f := createTempFeature(t)
 
-	_, err = f.WriteString("Feature: Foo")
+	_, err := f.WriteString("Feature: Foo")
 	assert.Nil(t, err)
 
 	assert.Nil(t, main.Run([]string{"-check", f.Name()}, io.Discard))
@@ -63,10 +61,9 @@ func TestCommandCheckSuccess(t *testing.T) {
 }
 
 func TestCommandCheckFailure(t *testing.T) {
-	f, err := os.CreateTemp("", "")
-	assert.Nil(t, err)
+	f := createTempFeature(t)
 
-	_, err = f.WriteString("Feature:  Foo")
+	_, err := f.WriteString("Feature:  Foo")
 	assert.Nil(t, err)
 
 	assert.Error(t, main.Run([]string{"-check", f.Name()}, io.Discard))
