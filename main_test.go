@@ -44,6 +44,30 @@ func TestCommandWithDirectory(t *testing.T) {
 	assert.Nil(t, os.RemoveAll(d))
 }
 
+func TestCommandCheckSuccess(t *testing.T) {
+	f, err := os.CreateTemp("", "")
+	assert.Nil(t, err)
+
+	_, err = f.WriteString("Feature: Foo")
+	assert.Nil(t, err)
+
+	assert.Nil(t, main.Run([]string{"-check", f.Name()}, io.Discard))
+
+	assert.Nil(t, os.Remove(f.Name()))
+}
+
+func TestCommandCheckFailure(t *testing.T) {
+	f, err := os.CreateTemp("", "")
+	assert.Nil(t, err)
+
+	_, err = f.WriteString("Feature:  Foo")
+	assert.Nil(t, err)
+
+	assert.Error(t, main.Run([]string{"-check", f.Name()}, io.Discard))
+
+	assert.Nil(t, os.Remove(f.Name()))
+}
+
 func TestCommandVersion(t *testing.T) {
 	b := bytes.NewBuffer(nil)
 
