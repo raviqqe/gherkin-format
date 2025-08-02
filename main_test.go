@@ -11,6 +11,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func createTempFeature(t *testing.T) *os.File {
+	f, err := os.CreateTemp("", "*.feature")
+	assert.Nil(t, err)
+	return f
+}
+
 func TestCommand(t *testing.T) {
 	f, err := os.CreateTemp("", "")
 	assert.Nil(t, err)
