@@ -41,3 +41,7 @@ func TestCommandWithDirectory(t *testing.T) {
 
 	assert.Nil(t, os.RemoveAll(d))
 }
+
+func TestCommandVersion(t *testing.T) {
+	assert.Nil(t, main.Run([]string{"-version"}))
+}
