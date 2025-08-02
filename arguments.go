@@ -6,19 +6,23 @@ import (
 )
 
 type Arguments struct {
-	Check bool
-	Paths []string
+	Check   bool
+	Paths   []string
+	Version bool
 }
 
 func GetArguments(ss []string) (Arguments, error) {
 	s := flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
-	c := s.Bool("check", false, "Check if files are formatted correctly.")
+	c := s.Bool("check", false, "check if files are formatted correctly")
+	v := s.Bool("version", false, "show version information")
 
-	err := s.Parse(ss)
-
-	if err != nil {
+	if err := s.Parse(ss); err != nil {
 		return Arguments{}, err
 	}
 
-	return Arguments{Check: *c, Paths: s.Args()}, nil
+	return Arguments{
+		Check:   *c,
+		Paths:   s.Args(),
+		Version: *v,
+	}, nil
 }
