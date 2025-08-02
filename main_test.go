@@ -75,5 +75,5 @@ func TestCommandVersion(t *testing.T) {
 	b := bytes.NewBuffer(nil)
 
 	assert.Nil(t, main.Run([]string{"-version"}, b))
-	assert.Equal(t, "0.1.0\n", b.String())
+	assert.Equal(t, main.Version+"\n", b.String())
 }
