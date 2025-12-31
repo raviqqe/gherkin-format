@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math"
 	"regexp"
 	"strings"
 
@@ -29,6 +30,11 @@ func (r *renderer) Render(d *messages.GherkinDocument) string {
 	slices.Reverse(r.comments)
 
 	r.renderFeature(d.Feature)
+
+	if len(r.comments) > 0 {
+		r.writeLine("")
+		r.renderComments(&messages.Location{Line: math.MaxInt64})
+	}
 
 	return r.builder.String()
 }
@@ -265,7 +271,7 @@ func (r *renderer) renderAfterComments(l *messages.Location) {
 }
 
 func (r *renderer) renderComment(c *messages.Comment) {
-	r.writeLine(normalizeText(c.Text))
+	r.writeLine(strings.TrimSpace(c.Text))
 }
 
 func (r renderer) getCellWidths(rs []*messages.TableRow) []int {
