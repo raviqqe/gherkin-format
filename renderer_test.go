@@ -252,6 +252,15 @@ Feature: Foo
   # bar
   Scenario: Bar
 		`,
+		`
+Feature: Foo
+
+  Scenario: Bar
+    Given Baz
+
+  # Scenario: Qux
+  #   Given Quux
+		`,
 	} {
 		s := strings.TrimSpace(s)
 
