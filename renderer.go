@@ -32,6 +32,7 @@ func (r *renderer) Render(d *messages.GherkinDocument) string {
 	r.renderFeature(d.Feature)
 
 	if len(r.comments) > 0 {
+		r.depth++
 		r.writeLine("")
 		r.renderComments(&messages.Location{Line: math.MaxInt64})
 	}
