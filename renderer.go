@@ -14,8 +14,6 @@ const INDENT = "  "
 
 var docStringLineRegexp = regexp.MustCompile("(^|\n)([^\n])")
 var spaceRegexp = regexp.MustCompile(`\s+`)
-
-// Cell widths are measured independently of the locale so that tables are formatted identically across environments.
 var cellWidthCondition = &runewidth.Condition{}
 
 type renderer struct {
