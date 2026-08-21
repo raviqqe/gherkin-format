@@ -345,6 +345,23 @@ Feature: Foo
 	assert.Equal(t, s+"\n", main.NewRenderer().Render(d))
 }
 
+func TestRendererRenderTableWithWideCharacters(t *testing.T) {
+	s := strings.TrimSpace(`
+Feature: Foo
+
+  Scenario: Bar
+    Given Baz
+      | 日本語 | a  |
+      | abc    | 😀 |
+      | é      | b  |
+  `)
+
+	d, err := gherkin.ParseGherkinDocument(strings.NewReader(s), func() string { return "" })
+
+	assert.Nil(t, err)
+	assert.Equal(t, s+"\n", main.NewRenderer().Render(d))
+}
+
 func TestRendererRenderFeatureTags(t *testing.T) {
 	s := strings.TrimSpace(`
 @tag
