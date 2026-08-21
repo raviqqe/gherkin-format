@@ -5,9 +5,10 @@
     "coverprofile",
     "golangci",
     "goreleaser",
+    "mattn",
     "raviqqe",
+    "runewidth",
     "samber",
-    "stretchr",
-    "willf"
+    "stretchr"
   ]
 }

@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/cucumber/messages/go/v22"
-	"github.com/willf/pad/utf8"
+	"github.com/mattn/go-runewidth"
 	"golang.org/x/exp/slices"
 )
 
@@ -14,6 +14,7 @@ const INDENT = "  "
 
 var docStringLineRegexp = regexp.MustCompile("(^|\n)([^\n])")
 var spaceRegexp = regexp.MustCompile(`\s+`)
+var cellWidthCondition = &runewidth.Condition{}
 
 type renderer struct {
 	builder  *strings.Builder
@@ -238,7 +239,7 @@ func (r renderer) renderCells(cs []*messages.TableCell, ws []int) {
 	s := "|"
 
 	for i, c := range cs {
-		s += " " + utf8.Right(r.escapeCellValue(c), ws[i], " ") + " |"
+		s += " " + cellWidthCondition.FillRight(r.escapeCellValue(c), ws[i]) + " |"
 	}
 
 	r.writeLine(s)
@@ -280,7 +281,7 @@ func (r renderer) getCellWidths(rs []*messages.TableRow) []int {
 
 	for _, row := range rs {
 		for i, c := range row.Cells {
-			if w := len(r.escapeCellValue(c)); w > ws[i] {
+			if w := cellWidthCondition.StringWidth(r.escapeCellValue(c)); w > ws[i] {
 				ws[i] = w
 			}
 		}
